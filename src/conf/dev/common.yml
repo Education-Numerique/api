@@ -1,0 +1,43 @@
+log_directory: '{LOG_PATH}'
+nonce_secret: b_wy%h=ts0ii3g0ulqbx8q%w(72zh%4hslu7js&(^q+_s49jj-
+token_secret: b_wy%h=ts0ii3g0ulqbx8q%w(72zh%4hslu7js&(^q+_s49jj-
+social_secret: b_wy%h=ts0ii3g0ulqbx8q%w(72zh%4hslu7js&(^q+_s49jj-
+mailer:
+  mandrill: 283b758e-faf4-4d8a-80e9-df64c033b201
+  mailchimp: f4e630914c80bd1b883665c81bbfc795-us5
+  list_id: 44a9ab5968
+
+nonce_ttl: 600
+realm: dev@roxee
+
+upload:
+  images:
+    width: 2000
+    height: 2000
+    size: 1000000
+    formats: [png,jpeg]
+    
+avatar:
+  sizes:  
+    square:
+      width: 75
+      height: 75
+      mode: crop
+    thumbnail:
+      width: 100
+      height: 100
+      mode: crop
+    medium:
+      width: 240
+      height: 240
+      mode: fit
+    large:
+      width: 500
+      height: 500
+      mode: fit
+      
+         
+auth:
+  admin:
+      host: localhost
+      port: 8081

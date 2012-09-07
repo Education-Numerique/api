@@ -1,0 +1,141 @@
+routing: 
+  - url: ^/debug$
+    params:
+        service: graph
+        module: Debug
+        action: debug
+    method: get
+
+  - url: ^/:version/types/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params:
+        service: graph
+        module: Types
+        action: create
+    method: post
+
+  - url: ^/:version/types/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params:
+        service: graph
+        module: Types
+        action: list
+    method: get
+
+  - url: ^/:version/types/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Types
+        action: info
+    method: get
+  
+  - url: ^/:version/types/:nid/create$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Types
+        action: createInstance
+    method: post
+
+  - url: ^/:version/types/:nid/actions$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Actions
+        action: create
+    method: post
+
+  - url: ^/:version/types/:nid/actions/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Actions
+        action: info
+    method: get
+
+
+  - url: ^/:version/types/:nid/actions/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Actions
+        action: update
+    method: post
+
+  - url: ^/:version/types/:nid/actions/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Actions
+        action: delete
+    method: delete
+
+
+  - url: ^/:version/nodes/:nid/actions/:aid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+        aid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Actions
+        action: createInstance
+    method: post
+
+  - url: ^/:version/nodes/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Nodes
+        action: fetch
+    method: get
+
+  - url: ^/:version/nodes/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Nodes
+        action: update
+    method: post
+
+  - url: ^/:version/nodes/:nid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Nodes
+        action: delete
+    method: delete
+
+
+
+  - url: ^/:version/nodes/:nid/:actions/:aid$
+    vars:
+        version: ([0-9]\.[0-9])
+        nid: ([a-zA-Z0-9]{25})
+        action: ([a-z0-9-_]+)
+    params:
+        service: graph
+        module: Actions
+        action: list
+    method: get

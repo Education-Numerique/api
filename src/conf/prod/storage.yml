@@ -1,0 +1,14 @@
+db:
+    host: localhost
+    port: 27017
+    db: roxee_services
+    seq: ['users']
+
+solr:
+    host: {PUKE-SOLR-HOST}
+    port: {PUKE-SOLR-PORT}
+    path: {PUKE-SOLR-PATH}
+
+memcache:
+    instances: ["127.0.0.1:11211", "127.0.0.1:11212"]
+    ttl: 600

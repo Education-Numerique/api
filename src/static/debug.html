@@ -1,0 +1,97 @@
+
+<!doctype html public "✰">
+<!--[if lt IE 7]> <html lang="en-us" class="no-js ie6"> <![endif]-->
+<!--[if IE 7]>    <html lang="en-us" class="no-js ie7"> <![endif]-->
+<!--[if IE 8]>    <html lang="en-us" class="no-js ie8"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en-us" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title dir="ltr"></title>
+  <script type="text/javascript" src="//static.sn.ackitup.net/lib/frameworks/jquery-1.7.js"></script>
+  <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"  rel="stylesheet"/>
+<!-- <script type="text/javascript" src="http://static.joncom.be/screen/script/json2.js"></script>
+<script type="text/javascript" src="http://static.joncom.be/screen/script/jsonformatter.js"></script> -->
+
+  </head>
+  <body>
+
+<form id="debug" class="form-horizontal" style="margin:20px">
+    <legend>JsBoot debug</legend>
+    <div class="control-group">
+        <div class="input-prepend">
+          <span class="add-on">URL</span><input class="span6" id="url" size="16" type="text" placeholder="/types">
+        </div>
+        <select id="method">
+          <option>GET</option>
+          <option>POST</option>
+          <option>DELETE</option>
+        </select>
+    </div>
+
+    <div class="control-group">
+    <textarea rows="5" id="payload" class="span10"></textarea>
+    </div>
+
+    <div class="control-group">
+        <input type="submit" class="btn btn-primary" value="Request"/>
+    </div>
+
+    <legend>Response <span id="respCode"></span> : <span id="respText"></span> </legend>
+    <div class="control-group">
+    <iframe id="responseContent" src="data:application/json;" rows="5" class="span10"></iframe>
+    </div>
+</form>
+
+<script>
+function getURLParameter(name) {
+    return decodeURI(
+        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.hash)||[,null])[1]
+    );
+}
+
+    window.onpopstate= function(e) {
+        var state = {}
+
+        if (!e.state) {
+            state.url = getURLParameter('url');
+            state.method = getURLParameter('method');
+            state.payload = '';
+        } else 
+            state = e.state;
+
+        $('#url').val(state.url);
+        $('#method').val(state.method);
+        $('#payload').val(state.payload);
+
+        $('#debug').submit();
+    };
+
+    $('#debug').submit(function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var url = window.location.pathname.split('#').pop();
+
+
+        history.pushState({ "url" : $('#url').val(), "method" : $('#method').val(), "payload" :$('#payload').val() }, $('#url').val(), '#url=' + $('#url').val() + '&method='+$('#method').val());
+        console.log('===>', jQuery.parseJSON( $('#payload').val() ));
+        $.ajax({
+            url : $('#url').val(),
+            type : $('#method').val(),
+            data : $('#payload').val(),
+            contentType : 'application/json',
+            complete : function(xhr, text) {
+                $('#respCode').html(xhr.status);
+                $('#respText').html(xhr.statusText);
+                var ct = xhr.getResponseHeader('content-type');
+                $('#responseContent').attr('src', 'data:'+ ct+';base64,' + btoa(xhr.responseText));
+            }
+        })
+        return false;
+    })
+</script>
+    
+  </body>
+</html>
+

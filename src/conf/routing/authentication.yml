@@ -1,0 +1,7 @@
+routing: 
+  - url: ^/.*$
+    params:
+        service: authentication
+        module: Handler
+        action: check
+    method: get

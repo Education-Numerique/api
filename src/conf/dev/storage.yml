@@ -1,0 +1,14 @@
+db:
+    host: localhost
+    port: 27017
+    db: roxee_services
+    seq: ['users']
+
+solr:
+    host: webitup.fr
+    port: 8983
+    path: datas/
+
+memcache:
+    instances: ["127.0.0.1:11211", "127.0.0.1:11212"]
+    ttl: 600

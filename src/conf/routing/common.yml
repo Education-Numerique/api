@@ -1,0 +1,7 @@
+common_routing:
+  - url: ^/varnish-probe$
+    params:
+        service: common
+        module: Prob
+        action: alive
+    method: get
