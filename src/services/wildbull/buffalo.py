@@ -1,7 +1,6 @@
 from lib import router, output
 from lib.app import Error, Controller
 import requests
-import json
 
 
 class Buffalo(router.Root):
@@ -17,7 +16,7 @@ class Buffalo(router.Root):
                 if not v:
                     continue
 
-                if k.lower() == 'host':
+                if k.lower() in ['host', 'keep-alive']:
                     continue
 
                 sendHeaders[k] = v
