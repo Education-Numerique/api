@@ -1,0 +1,208 @@
+routing:
+
+  ##############################################################################
+  #
+  #  Account
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: create
+    method: post  
+
+  - url:    ^/:version/users/validate$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: validate
+    method: post
+
+  - url:    ^/:version/users/:uid/activate$
+    vars:
+      uid: ([a-zA-Z0-9]{23})
+      version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: activate
+    method: post
+
+  - url:    ^/:version/users/:uid/deactivate$
+    vars:
+      uid: ([a-zA-Z0-9]{23})
+      version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: deactivate
+    method: post
+
+  - url:    ^/:version/users/authenticate$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: authenticate
+    method: post
+
+  - url : ^/:version/users/:uid$
+    vars:
+      uid: ([a-zA-Z0-9]{23})
+      version: ([0-9]\.[0-9])
+    params:
+        service: users
+        module: Account
+        action: delete
+    method: delete
+
+  - url:    ^/:version/users/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: list
+    method: get
+
+
+  ##############################################################################
+  #
+  #  Profile
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/:uid/profile$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Profile
+        action: get
+    method: get
+
+  - url:    ^/:version/users/:uid/profile$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Profile
+        action: set
+    method: post
+
+
+  ##############################################################################
+  #
+  #  Avatar
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/:uid/avatar/:size$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+        size: ([a-z]+)
+    params: 
+        service : graph.users
+        module : Avatar
+        action: get
+    method: get
+
+  - url:    ^/:version/users/:uid/avatar$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Avatar
+        action: set
+    method: post
+
+  - url:    ^/:version/users/:uid/avatar$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Avatar
+        action: delete
+    method: delete
+
+
+  ##############################################################################
+  #
+  #  Settings
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/:uid/settings$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Settings
+        action: get
+    method: get
+
+  - url:    ^/:version/users/:uid/settings$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Settings
+        action: set
+    method: post
+
+  ##############################################################################
+  #
+  #  Preferences
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/:uid/preferences$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Preferences
+        action: get
+    method: get
+
+  - url:    ^/:version/users/:uid/preferences$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Preferences
+        action: set
+    method: post
+
+
+  ##############################################################################
+  #
+  #  Activities
+  #
+  ##############################################################################
+
+  - url:    ^/:version/users/:uid/activities$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+    params: 
+        service : graph.users
+        module : Activities
+        action: list
+    method: get
