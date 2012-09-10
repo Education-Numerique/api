@@ -1,5 +1,3 @@
-#from httplib2 import Http
-#from urllib.parse import urlencode
 from lib.config import Config
 from json import JSONDecoder
 import requests
@@ -26,8 +24,10 @@ class AdminRequest():
                 params.append((key, value))
 
             try:
-                resp = AdminRequest.SESSION.request(method.upper(), self.host + uri, data=params, headers=self.__headers, timeout=2)
-                #(resp, content) =  self.__cnx.request( self.host + uri , method.upper(), body=urlencode(params), headers = self.__headers)
+                resp = AdminRequest.SESSION.request(
+                    method.upper(),
+                    self.host + uri,
+                    data=params, headers=self.__headers, timeout=2)
             except Exception as err:  # timeout error
                 raise AdminError(err)
 

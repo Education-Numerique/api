@@ -180,3 +180,63 @@ class MyCollection:
 
     def __failHandler(self):
         raise DbError("no connection")
+
+
+class MemcacheError(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class Memcache:
+
+    class __impl ():
+
+        def __init__(self):
+            instances = Config().get('memcache')['instances']
+            self.mc = memcache.Client(instances, debug=0)
+            self.ttl = Config().get('memcache')['ttl']
+
+        def set(self, key, value, domain=''):
+            return self.mc.set("%s_%s" % (domain.encode('utf-8'), key.encode('utf-8')), value, self.ttl)
+
+        def get(self, key, domain=''):
+            return self.mc.get("%s_%s" % (domain.encode('utf-8'), key.encode('utf-8')))
+
+        def delete(self, key, domain=''):
+            return self.mc.delete("%s_%s" % (domain.encode('utf-8'), key.encode('utf-8')))
+
+        def incr(self, key, domain=''):
+            return self.mc.incr("%s_%s" % (domain.encode('utf-8'), key.encode('utf-8')))
+
+        def decr(self, key, domain=''):
+            return self.mc.decr("%s_%s" % (domain.encode('utf-8'), key.encode('utf-8')))
+
+        def checkAlive(self):
+            resp = self.get('internal_alive', '')
+
+            if resp:
+                return True
+
+            check = self.set('internal_alive', True, 86400)
+            if not check:
+                raise MemcacheError('memcache is down')
+
+    __instance = None
+
+    def __init__(self):
+        """ Create singleton instance """
+        if Memcache.__instance is None:
+            Memcache.__instance = Memcache.__impl()
+
+        self.__dict__['_Controller__instance'] = Memcache.__instance
+
+    def __getattr__(self, attr):
+        """ Delegate access to implementation """
+        return getattr(self.__instance, attr)
+
+    def __setattr__(self, attr, value):
+        """ Delegate access to implementation """
+        return setattr(self.__instance, attr, value)

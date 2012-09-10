@@ -1,0 +1,59 @@
+routing:
+  - url:    ^/:version/user/bylogin/:login$
+    vars:
+        version: ([0-9]\.[0-9])
+        login: (.*)
+    params: 
+        service : authentication.admin
+        module : User
+        action: findByLogin
+    method: get
+
+  - url:    ^/:version/user/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : authentication.admin
+        module : User
+        action: create
+    method: post
+
+  - url:    ^/:version/user/:uid$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([0-9a-zA-Z]{32})
+    params: 
+        service : authentication.admin
+        module : User
+        action: update
+    method: post
+
+  - url:    ^/:version/user/:uid/activate$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([0-9a-zA-Z]{32})
+    params: 
+        service : authentication.admin
+        module : User
+        action: activate
+    method: post
+
+  - url:    ^/:version/user/:uid/deactivate$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([0-9a-zA-Z]{32})
+    params: 
+        service : authentication.admin
+        module : User
+        action: deactivate
+    method: post
+
+
+  - url:    ^/:version/key/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : authentication.admin
+        module : Key
+        action: create
+    method: post

@@ -1,0 +1,7 @@
+routing:
+  - url: ^/.*$
+    params:
+        service: wildbull
+        module: Buffalo
+        action: zebuit
+    method: [get, update, delete]

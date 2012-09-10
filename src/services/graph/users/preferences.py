@@ -35,7 +35,7 @@ class Preferences(router.Root):
             }, True)
 
             #Let's flush a few stuff
-            FlushRequest().request('users.Preferences.[get]', {'uid': me})
+            FlushRequest().request('graph.users.Preferences.get', {'uid': me})
 
             output.success('preferences updated', 200)
 

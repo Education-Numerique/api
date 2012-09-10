@@ -1,0 +1,55 @@
+routing:
+  - url:    ^/:version/users/:uid/avatar/:size$
+    vars:
+        version: ([0-9]\.[0-9])
+        uid: ([a-zA-Z0-9]{23})
+        size: ([a-z]+)
+    params: 
+        service : authentication.front
+        module : Void
+        action: check
+    method: get 
+
+  - url:    ^/:version/users/$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : authentication.front
+        module : Anonymous
+        action: check
+    method: post 
+
+  - url:    ^/:version/users/validate$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : authentication.front
+        module : Anonymous
+        action: check
+    method: post
+
+  - url:    ^/:version/connect/facebook/:fbid/link$
+    vars:
+        version: ([0-9]\.[0-9])
+        fbid: ([0-9]+)
+    params: 
+        service : authentication.front
+        module : Generic
+        action: check
+    method: post 
+
+  - url:    ^/:version/connect/facebook/.*$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : authentication.front
+        module : Anonymous
+        action: check
+    method: [get, post, delete]
+
+  - url: ^/.*$
+    params:
+        service: authentication.front
+        module: Generic
+        action: check
+    method: [get, post, delete]

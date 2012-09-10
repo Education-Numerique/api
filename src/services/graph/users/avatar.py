@@ -180,5 +180,7 @@ class Avatar(router.Root):
         wlSize = Config().get('avatar')['sizes']
 
         for size in wlSize:
-            FlushRequest(
-            ).request('users.Avatar.get', {'uid': uid, 'size': size})
+            FlushRequest().request('users.Avatar.get', {
+                'uid': uid,
+                'size': size
+            })

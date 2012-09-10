@@ -1,7 +1,7 @@
 db:
     host: localhost
     port: 27017
-    db: lxxl_services
+    db: lxxl
     seq: ['users']
 
 memcache:

@@ -21,13 +21,6 @@ class Account(router.Root):
             if not form.validate():
                 output.error(form.errors)
 
-            try:
-                beta = BetaInvite.check(form.beta.data)
-            except AlreadyValidatedCode:
-                output.error('already validated beta code', 403)
-            except UnknownValidationCode:
-                output.error('invalid beta code', 400)
-
             user = User()
             user.email = form.email.data.lower()
             user.username = form.username.data
@@ -35,7 +28,6 @@ class Account(router.Root):
 
             #UID
             id = Db().get('users').increment()
-            user.generateUid(id)
 
             #activation code
             user.generateActivationCode()
@@ -71,9 +63,6 @@ class Account(router.Root):
                 'updated': datetime.datetime.utcnow()
             }, True)
 
-            #validate beta code
-            BetaInvite.validate(form.beta.data, user)
-
             #send mail
             AsyncMailer(
                 template_name='email-validation',
@@ -108,8 +97,11 @@ class Account(router.Root):
             ).start()
 
             bday = ''
-            if (profile['birthdate'].month, profile['birthdate'].day):
-                bday = profile['birthdate']
+            if profile['birthdate']:
+                bday = "%s/%s" % (
+                    profile['birthdate'].month,
+                    profile['birthdate'].day
+                )
 
             #register user in mailchimp internal user list
             AsyncUserRegister(
@@ -127,20 +119,10 @@ class Account(router.Root):
                     'STATUS': 'Pending activation',
                     'ACTCODE': user.activation_code,
                     'CREATIONDT': "%s" % datetime.datetime.utcnow(),
-                    'BIRTHDAY': "%s/%s",
-                    'SOURCE': 'Roxee'
+                    'BIRTHDAY': bday,
+                    'SOURCE': 'Classic'
                 }
             ).start()
-
-            #Let's flush a few stuff
-            FlushRequest(
-            ).request('users.Beta.[requests]', {'uid': beta.godfather})
-
-            try:
-                #XXX should not refetch from MONGO
-                UserSync.update(UserFactory().get(user.uid))
-            except:
-                print('////####\\\\\\\\ user index error')
 
             output.success(user.activation_code, 200)
 
@@ -282,4 +264,3 @@ class AccountCreateValidation(Form):
     password = TextField('password', [validators.Length(min=6, max=25)])
     gender = TextField('gender', [validators.Length(min=1, max=2)])
     birthdate = DateTimeField('birthdate', format='%Y-%m-%d')
-    beta = TextField('beta', [validators.Length(min=20, max=20)])

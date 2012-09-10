@@ -16,7 +16,7 @@ upload:
     height: 2000
     size: 1000000
     formats: [png,jpeg]
-    
+
 avatar:
   sizes:  
     square:
@@ -35,8 +35,8 @@ avatar:
       width: 500
       height: 500
       mode: fit
-      
-         
+
+
 auth:
   admin:
       host: localhost
