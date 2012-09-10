@@ -17,18 +17,6 @@ DESCENDING = pymongo.DESCENDING
 ObjectId = bson.objectid.ObjectId
 
 
-
-
-# from bulbs.config import Config, DEBUG
-# >>> from bulbs.neo4jserver import Graph, NEO4J_URI
-# >>> config = Config(NEO4J_URI, username="james", password="secret")
-# >>>> config.c.type_var = 'jsboot_type'
-# >>> config.set_logger(DEBUG)
-# >>> g = Graph(config)
-
-
-
-
 class Db:
 
     class __impl ():

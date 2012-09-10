@@ -1,14 +1,15 @@
-import storage
+from lib import storage
 from storage import Db, DbError
-from config import Config
+from lib.config import Config
 from hashlib import md5
-import output
-import utils
+import lib.output
+import lib.utils
 import datetime
 
+
 class User:
-    
-    def __init__ (self, **entries):
+
+    def __init__(self, **entries):
         self.uid = None
         self.seq = None
         self.username = None
@@ -22,15 +23,15 @@ class User:
         self.date = None
         self.premium = False
         self.connect = {}
-        
+
         self.__dict__.update(entries)
-        
+
         #clear exclude fields
         try:
             del self.friends
         except:
             pass
-    
+
     def addConnect(self, type, id):
         self.connect[type] = id
 
@@ -38,8 +39,19 @@ class User:
             return
 
         try:
-            Db().get('users').ensure_index([('connect.%s' % type, storage.DESCENDING)], { 'unique' : True, 'background' : False, 'sparse' : True,  'dropDups' : True })
-            Db().get('users').update({'uid' : self.uid}, {'$set' : {'connect.%s' % type : id}})
+            Db().get('users').ensure_index([
+                ('connect.%s' % type, storage.DESCENDING)],
+                {
+                    'unique': True,
+                    'background': False,
+                    'sparse': True,
+                    'dropDups': True
+                })
+
+            Db().get('users').update(
+                {'uid': self.uid},
+                {'$set': {'connect.%s' % type: id}}
+            )
         except DbError:
             output.error('cannot access db', 503)
 
@@ -48,7 +60,10 @@ class User:
             return True
 
     def getProfile(self):
-        Db().get('profile').ensure_index([('uid', storage.ASCENDING)], { 'background' : True })
+        Db().get('profile').ensure_index(
+            [('uid', storage.ASCENDING)],
+            {'background': True}
+        )
         profile = Db().get('profile').find_one({ 'uid' : self.uid})
 
         if profile:
