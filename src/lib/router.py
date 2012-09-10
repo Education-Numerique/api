@@ -17,10 +17,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import re, sys
+import re
+import sys
 from webob import exc
 
 PY3 = sys.version_info[0] == 3
+
 
 def unpack(iterable):
     """ Iter through an iterable container by unpacking by pair """
@@ -37,7 +39,7 @@ def unpack(iterable):
 
 class Root(object):
 
-    def __call__(self, environ, start_response, params = {}):
+    def __call__(self, environ, start_response, params={}):
         if hasattr(self, params['action']):
             call = getattr(self, params['action'])
             if callable(call):
@@ -45,7 +47,7 @@ class Root(object):
                     resp = call(environ, params)
                 except exc.HTTPException as resp:
                     pass
-                
+
                 return resp(environ, start_response)
 
         resp = exc.HTTPNotImplemented()
@@ -57,7 +59,8 @@ class Router(object):
 
     def __init__(self):
         self._routes = {'default': []}
-        self._compile = lambda value: [(re.compile(i), j, k, l) for i, j, k, l in unpack(value)]
+        self._compile = lambda value: [(re.compile(i), j, k, l)
+                                       for i, j, k, l in unpack(value)]
 
     def __setitem__(self, key, value):
         if key == '*':
@@ -69,71 +72,71 @@ class Router(object):
 
     def append(self, value, vhost='default'):
         self._routes[vhost].append(self._compile(value))
-    
-    def matchRoutes(self, namespace, replace, host = 'default'):
+
+    def matchRoutes(self, namespace, replace, host='default'):
         infos = namespace.split('.')
         #pad array
         infos = infos + ['*'] * (3 - len(infos))
-        
+
         service = infos[0] if infos[0] != '*' else True
         module = infos[1] if infos[1] != '*' else True
         action = infos[2] if infos[2] != '*' else True
-        
+
         urls = []
-        
+
         for route in self._routes[host]:
             (m, obj, vars, params) = route
             if (service == True or params['service'] in service) and \
                 (module == True or params['module'] in module) and \
-                (action == True or params['action'] in action):
+                    (action == True or params['action'] in action):
                 url = params['pattern']
 
                 for name in vars:
                     if name not in replace:
                         continue
-                    
+
                     url = url.replace(':' + name, replace[name]).rstrip('\/?')
-                
+
                 urls.append(url.strip('^').strip('$'))
-        
+
         return urls
-            
-    def getRoute(self, namespace, replace, host = 'default'):
+
+    def getRoute(self, namespace, replace, host='default'):
         infos = namespace.split('.')
-        
+
         for route in self._routes[host]:
             (m, obj, vars, params) = route
 
             if params['service'] == infos[0] and \
-               params['module'] == infos[1] and \
-               params['action'] == infos[2]:
+                params['module'] == infos[1] and \
+                    params['action'] == infos[2]:
                 url = params['pattern']
 
                 for name in vars:
                     if name not in replace:
                         continue
-                    
+
                     url = url.replace(':' + name, replace[name]).rstrip('\/?')
-                
+
                 return url.strip('^').strip('$')
-                
+
     def _get_routes(self, environ):
         host_header = environ.get('HTTP_HOST', 'default').split(':')[0]
         if not host_header in self._routes:
             return self._routes['default']
-        
+
         return self._routes[host_header]
-    
+
     def __call__(self, environ, start_response):
         path_info = environ.get('PATH_INFO', '/')
         meth = environ.get('REQUEST_METHOD', 'GET').lower()
 
         for route in self._get_routes(environ):
             (m, obj, vars, params) = route
-            
+
             if params['method'] != '*' and meth not in params['method']:
                 continue
-            
+
             exp = m.match(path_info)
             if exp:
                 #return values
@@ -145,7 +148,7 @@ class Router(object):
                     except:
                         pass
                     index = index + 1
-                    
+
                 return obj(environ, start_response, params)
         resp = exc.HTTPNotFound()
         return resp(environ, start_response)

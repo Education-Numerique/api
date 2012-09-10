@@ -48,11 +48,15 @@ class Account(router.Root):
 
             #Init account on admin service
             try:
-                resp = AdminRequest().request('/1.0/user', {'uid' : user.uid, 'login' : user.email.lower(), 'password' : form.password.data})
+                resp = AdminRequest().request('/1.0/user', {
+                    'uid': user.uid,
+                    'login': user.email.lower(),
+                    'password': form.password.data}
+                )
             except AdminError as e:
-                output.error('Registration error : %s' %e, 500)
+                output.error('Registration error : %s' % e, 500)
 
-            if resp == None or int(resp.getHeader('status')) != 201:
+            if resp is None or int(resp.getHeader('status')) != 201:
                 Db().get('users').remove(user._id)
                 output.error('registration troubles ...', 500)
 
@@ -61,68 +65,76 @@ class Account(router.Root):
             profile['birthdate'] = form.birthdate.data
 
             #XXX should be done by the model
-            Db().get('profile').update({ 'uid' : user.uid}, {'datas' : profile, 'uid' : user.uid, 'updated' : datetime.datetime.utcnow()}, True)
+            Db().get('profile').update({'uid': user.uid}, {
+                'datas': profile,
+                'uid': user.uid,
+                'updated': datetime.datetime.utcnow()
+            }, True)
 
             #validate beta code
             BetaInvite.validate(form.beta.data, user)
 
             #send mail
             AsyncMailer(
-                template_name = 'email-validation',
-                template_content = [{
-                    'name' : 'validation_code',
-                    'content' : user.activation_code
+                template_name='email-validation',
+                template_content=[{
+                    'name': 'validation_code',
+                    'content': user.activation_code
                 }],
-                global_merge_vars = [
+                global_merge_vars=[
                 ],
-                message = {
-                    'subject' : 'Validate your e-mail at Roxee',
-                    'from_email' : 'no-reply@roxee.tv',
-                    'from_name' : 'Roxee Project',
-                    'headers' : {},
-                    'to' : [
+                message={
+                    'subject': 'Validate your e-mail at Roxee',
+                    'from_email': 'no-reply@roxee.tv',
+                    'from_name': 'Roxee Project',
+                    'headers': {},
+                    'to': [
                         {
-                            'email' : user.email,
-                            'name' : user.username
+                            'email': user.email,
+                            'name': user.username
                         }
                     ],
-                    'metadata' : {
-                        'uid' : user.uid,
-                        'email_validation_code' : user.activation_code
+                    'metadata': {
+                        'uid': user.uid,
+                        'email_validation_code': user.activation_code
                     },
-                    'tags' : ['email-validation'],
-                    'google_analytics_domains' : ['beta.roxee.tv'],
-                    'google_analytics_campaign' : ['internal_email_validation'],
-                    'auto_text' : True,
-                    'track_opens' : True,
-                    'track_clicks' : True
+                    'tags': ['email-validation'],
+                    'google_analytics_domains': ['beta.roxee.tv'],
+                    'google_analytics_campaign': ['internal_email_validation'],
+                    'auto_text': True,
+                    'track_opens': True,
+                    'track_clicks': True
                 }
             ).start()
+
+            bday = ''
+            if (profile['birthdate'].month, profile['birthdate'].day):
+                bday = profile['birthdate']
 
             #register user in mailchimp internal user list
             AsyncUserRegister(
-                email_address=beta.email, #use the invitation email and update it
+                email_address=beta.email,
+                #use the invitation email and update it
                 double_optin=False,
                 update_existing=True,
-                merge_vars = { 
-                    'EMAIL' : user.email,
-                    'UID' : user.uid,
-                    'USERNAME' : user.username,
-                    'FNAME' : user.firstname,
-                    'LNAME' : user.lastname,
-                    'GENDER' : 'Male' if profile['gender'] == 1 else 'Female',
-                    'STATUS' : 'Pending activation', #Pending activation or Registered
-                    'ACTCODE' : user.activation_code, #activation code
-                    'CREATIONDT' : "%s" % datetime.datetime.utcnow(), #creation date
-                    'BIRTHDAY' : "%s/%s" % (profile['birthdate'].month, profile['birthdate'].day) if profile['birthdate'] else '', #MM/DD
-                    'BETAUSER' : 1, #is a beta user ?
-                    'SOURCE' : 'Roxee'
+                merge_vars={
+                    'EMAIL': user.email,
+                    'UID': user.uid,
+                    'USERNAME': user.username,
+                    'FNAME': user.firstname,
+                    'LNAME': user.lastname,
+                    'GENDER': 'Male' if profile['gender'] == 1 else 'Female',
+                    'STATUS': 'Pending activation',
+                    'ACTCODE': user.activation_code,
+                    'CREATIONDT': "%s" % datetime.datetime.utcnow(),
+                    'BIRTHDAY': "%s/%s",
+                    'SOURCE': 'Roxee'
                 }
-
             ).start()
 
             #Let's flush a few stuff
-            FlushRequest().request('users.Beta.[requests]', {'uid' : beta.godfather})
+            FlushRequest(
+            ).request('users.Beta.[requests]', {'uid': beta.godfather})
 
             try:
                 #XXX should not refetch from MONGO
@@ -144,7 +156,7 @@ class Account(router.Root):
             if not 'email' in datas or not 'code' in datas:
                 output.error('invalidate code', 400)
 
-            user = UserFactory().get({'email' : datas['email'] })
+            user = UserFactory().get({'email': datas['email']})
 
             if user is None:
                 output.error('unknown user', 400)
@@ -152,60 +164,53 @@ class Account(router.Root):
             if user.activate == 1:
                 output.error('already activated', 403)
 
-            if user.activation_code !=  datas['code']:
+            if user.activation_code != datas['code']:
                 output.error('invalidate code', 400)
 
             #Init account on admin service
             try:
-                resp = AdminRequest().request('/1.0/user/'+ user.uid+'/activate', {'uid' : user.uid, 'login' : user.email})
+                uri = '/1.0/user/' + user.uid + '/activate'
+                resp = AdminRequest().request(uri, {
+                    'uid': user.uid,
+                    'login': user.email
+                })
             except AdminError as e:
-                output.error('Registration error : %s' %e, 500)
+                output.error('Registration error : %s' % e, 500)
 
-            if resp == None or int(resp.getHeader('status')) != 200:
+            if resp is None or int(resp.getHeader('status')) != 200:
                 output.error('activation troubles ...', 500)
 
             user.activation_code = None
             user.activate = 1
 
-            Db().get('users').update({'uid' : user.uid}, user)
+            Db().get('users').update({'uid': user.uid}, user)
 
             #send mail
             AsyncMailer(
-                template_name = 'registered',
-                template_content = [],
-                global_merge_vars = [],
-                message = {
-                    'subject' : 'Welcome to Roxee Private Beta !',
-                    'from_email' : 'no-reply@roxee.tv',
-                    'from_name' : 'Roxee Project',
-                    'headers' : {},
-                    'to' : [
+                template_name='registered',
+                template_content=[],
+                global_merge_vars=[],
+                message={
+                    'subject': 'Welcome to Roxee Private Beta !',
+                    'from_email': 'no-reply@roxee.tv',
+                    'from_name': 'Roxee Project',
+                    'headers': {},
+                    'to': [
                         {
-                            'email' : user.email,
-                            'name' : user.username
+                            'email': user.email,
+                            'name': user.username
                         }
                     ],
-                    'metadata' : {
-                        'uid' : user.uid
+                    'metadata': {
+                        'uid': user.uid
                     },
-                    'tags' : ['welcome'],
-                    'google_analytics_domains' : ['beta.roxee.tv'],
-                    'google_analytics_campaign' : ['internal_registered'],
-                    'auto_text' : True,
-                    'track_opens' : True,
-                    'track_clicks' : True
+                    'tags': ['welcome'],
+                    'google_analytics_domains': ['beta.roxee.tv'],
+                    'google_analytics_campaign': ['internal_registered'],
+                    'auto_text': True,
+                    'track_opens': True,
+                    'track_clicks': True
                 }
-            ).start()
-
-            AsyncUserRegister(
-                email_address=user.email, #use the invitation email and update it
-                double_optin=False,
-                update_existing=True,
-                merge_vars = { 
-                    'STATUS' : 'Registered', #Pending activation or Registered
-                    'CREATIONDT' : "%s" % datetime.datetime.utcnow(), #creation date
-                }
-
             ).start()
 
             output.success('user activated', 200)
@@ -234,7 +239,7 @@ class Account(router.Root):
 
             #XXX fix privacy
             # if relation != 2 and relation != 1:
-            #     output.error('#ApiKeyUnauthorized : none of your business', 403)
+            #     output.error('#ApiKeyUnauthorized', 403)
 
             friends, total = UserFactory().getAllUsers()
 
@@ -258,7 +263,8 @@ class Account(router.Root):
 
             output.noCache()
 
-            Controller().getResponse().headers['X-UID'] = '%s' % Controller().getUid()
+            Controller().getResponse(
+            ).headers['X-UID'] = '%s' % Controller().getUid()
             output.success('authenticated', 200)
 
         except Error:
@@ -266,10 +272,14 @@ class Account(router.Root):
 
         return Controller().getResponse(True)
 
+
 class AccountCreateValidation(Form):
-    username     = TextField('username', [validators.Length(min=5, max=25)])
-    email        = TextField('email', [validators.Length(min=6, max=320), validators.Email()])
+    username = TextField('username', [validators.Length(min=5, max=25)])
+    email = TextField('email', [
+        validators.Length(min=6, max=320),
+        validators.Email()
+    ])
     password = TextField('password', [validators.Length(min=6, max=25)])
-    gender = TextField('gender',[validators.Length(min=1, max=2)])
+    gender = TextField('gender', [validators.Length(min=1, max=2)])
     birthdate = DateTimeField('birthdate', format='%Y-%m-%d')
     beta = TextField('beta', [validators.Length(min=20, max=20)])
