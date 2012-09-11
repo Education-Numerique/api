@@ -3,4 +3,4 @@
 Frequently Asked Questions
 ==========================
 
-This part of the documentation answers common questions about Requests.
+This part of the documentation answers common questions about LxxL.
