@@ -1,4 +1,4 @@
-.. Requests documentation master file, created by
+.. LxxL documentation master file, created by
    sphinx-quickstart on Sun Feb 13 23:54:25 2011.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -19,8 +19,8 @@ User Guide
 ----------
 
 This part of the documentation, which is mostly prose, begins with some
-background information about Requests, then focuses on step-by-step
-instructions for getting the most out of Requests.
+background information about LxxL, then focuses on step-by-step
+instructions for getting the most out of LxxL.
 
 .. toctree::
    :maxdepth: 2
@@ -35,7 +35,7 @@ Community Guide
 -----------------
 
 This part of the documentation, which is mostly prose, details the
-Requests ecosystem and community.
+LxxL ecosystem and community.
 
 .. toctree::
    :maxdepth: 1
