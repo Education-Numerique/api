@@ -4,6 +4,9 @@
 import os
 import sys
 import pkg_resources
+from os import fork, chdir, setsid, umask
+from sys import exit
+from wsgiref.simple_server import make_server
 
 # insert contrib libs just after current directory
 ROOT = os.path.join(pkg_resources.get_distribution('lxxl').location, 'lxxl')
@@ -40,6 +43,26 @@ application.addRoutingFromConfig('*', routing)
 log.info('Roxee Data server is running (#%s).' % os.getpid())
 
 
-if __name__ == '__main__':
-    from wsgiref.simple_server import make_server
+def main():
     make_server('localhost', 8083, application).serve_forever()
+
+if __name__ == '__main__':
+    try:
+        pid = fork()
+        if pid > 0:
+            exit(0)
+    except OSError as e:
+        exit(1)
+
+    chdir("/")
+    setsid()
+    umask(0)
+
+    try:
+        pid = fork()
+        if pid > 0:
+            exit(0)
+    except OSError as e:
+        exit(1)
+
+    main()

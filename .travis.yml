@@ -3,9 +3,9 @@ python:
   - "3.2"
 # command to install dependencies
 install: "python setup.py install"
-# before_script:
-#   - "lxxl.graph"
-#   - "curl -iv http://localhost:8082/1.0/users/"
+before_script:
+  - "lxxl.graph"
+  - "curl -iv http://localhost:8083/1.0/users/"
 # command to run tests
 script: nosetests
 services:
