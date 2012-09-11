@@ -16,7 +16,22 @@ if major < 3 or minor < 2:
 
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
-requires = []
+requires = [
+    'pyyaml',
+    'webob',
+    'requests',
+    'python3-digest',
+    'python3-memcached',
+    'pymongo',
+    'WTForms',
+    'mailsnake',
+    'pil'
+]
+
+dep_links = [
+    'https://github.com/webitup/py3k-mailsnake/zipball/master#egg=mailsnake',
+    'https://github.com/webitup/pil-py3k-mirror/zipball/master#egg=pil'
+]
 
 setup(
     name='lxxl',
@@ -27,10 +42,9 @@ setup(
     author_email='tech@webitup.fr',
     url='http://education-numerique.github.com/api/',
     packages=find_packages(),
-    package_data={'': ['LICENSE.md']},
-    package_dir={'lxxl': 'lxxl'},
     include_package_data=True,
     install_requires=requires,
+    dependency_links=dep_links,
     license=open('LICENSE.md').read(),
     classifiers=(
         'Development Status :: 1 - Planning',
@@ -42,8 +56,8 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1',
-    ),
+        'Programming Language :: Python :: 3.1'
+    )
 )
 
 del os.environ['PYTHONDONTWRITEBYTECODE']
