@@ -43,29 +43,17 @@ setup(
     author_email='tech@webitup.fr',
     url='http://education-numerique.github.com/api/',
     packages=find_packages(),
-    scripts = [
-       'bin/lxxl.graph',
-       'bin/lxxl.wildbull',
-       'bin/lxxl.authentication.admin',
-       'bin/lxxl.authentication.front'
+    scripts=[
+        'bin/lxxl.graph',
+        'bin/lxxl.wildbull',
+        'bin/lxxl.authentication.admin',
+        'bin/lxxl.authentication.front'
     ],
     package_dir={'lxxl': 'lxxl'},
     include_package_data=True,
     install_requires=requires,
     dependency_links=dep_links,
-    license=open('LICENSE.md').read(),
-    classifiers=(
-        'Development Status :: 1 - Planning',
-        'Intended Audience :: Developers',
-        'Intended Audience :: Education',
-        'Natural Language :: English',
-        'License :: OSI Approved :: GNU Affero General \
-        Public License v3 or later (AGPLv3+)',
-        'Programming Language :: Python',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.0',
-        'Programming Language :: Python :: 3.1'
-    )
+    license=open('LICENSE.md').read()
 )
 
 del os.environ['PYTHONDONTWRITEBYTECODE']
