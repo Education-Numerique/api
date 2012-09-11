@@ -1,5 +1,5 @@
 import requests
-from lib.config import Config
+from .config import Config
 from json import JSONDecoder
 from hashlib import sha1
 

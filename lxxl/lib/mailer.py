@@ -1,5 +1,5 @@
 from mailsnake import MailSnake
-from lib.config import Config
+from .config import Config
 import threading
 
 mandrill = MailSnake(Config().get('mailer')['mandrill'], api='mandrill')

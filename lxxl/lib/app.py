@@ -1,5 +1,5 @@
-from lib import router, log
-from lib.config import Config
+from . import router, log
+from .config import Config
 from hashlib import sha1
 from webob import Request, Response
 from json import loads
@@ -217,5 +217,5 @@ class ServiceLoader:
 
     def __load(self, service, module):
         print ('===> Mounting %s::%s service' % (service, module))
-        exec ('from services.%s import %s' % (service.lower(), module))
+        exec ('from lxxl.services.%s import %s' % (service.lower(), module))
         return locals()[module]()

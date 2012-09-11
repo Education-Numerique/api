@@ -5,7 +5,7 @@ from gridfs import GridFS
 from gridfs.errors import NoFile
 
 import memcache
-from lib.config import Config
+from .config import Config
 
 
 class DbError(Exception):

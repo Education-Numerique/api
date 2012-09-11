@@ -1,6 +1,6 @@
-from lib.config import Config
-from lib import app, output, storage
-from model.auth import users, access
+from .config import Config
+from . import app, output, storage
+from lxxl.model.auth import users, access
 import python_digest
 import time
 import hashlib

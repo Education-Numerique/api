@@ -1,6 +1,6 @@
 # from httplib2 import Http
-from lib.config import Config
-from lib.app import Controller
+from .config import Config
+from .app import Controller
 import requests
 
 

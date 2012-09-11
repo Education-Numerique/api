@@ -1,14 +1,14 @@
 import datetime
 from wtforms import Form, BooleanField, TextField, validators, DateTimeField
 
-from lib import router, output
-from lib.app import Controller, Error
-from lib.storage import Db
-from lib.admin import AdminRequest, AdminError
-from lib.flush import FlushRequest
-from lib.mailer import AsyncMailer, AsyncUserRegister
+from lxxl.lib import router, output
+from lxxl.lib.app import Controller, Error
+from lxxl.lib.storage import Db
+from lxxl.lib.admin import AdminRequest, AdminError
+from lxxl.lib.flush import FlushRequest
+from lxxl.lib.mailer import AsyncMailer, AsyncUserRegister
 
-from model.users import User, UserFactory, Duplicate
+from lxxl.model.users import User, UserFactory, Duplicate
 
 
 class Account(router.Root):

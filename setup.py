@@ -42,6 +42,13 @@ setup(
     author_email='tech@webitup.fr',
     url='http://education-numerique.github.com/api/',
     packages=find_packages(),
+    scripts = [
+       'bin/lxxl.graph',
+       'bin/lxxl.wildbull',
+       'bin/lxxl.authentication.admin',
+       'bin/lxxl.authentication.front'
+    ],
+    package_dir={'lxxl': 'lxxl'},
     include_package_data=True,
     install_requires=requires,
     dependency_links=dep_links,

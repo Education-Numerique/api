@@ -1,6 +1,6 @@
-from lib import output, utils
-from lib.storage import Db, DbError
-from lib.config import Config
+from lxxl.lib import output, utils
+from lxxl.lib.storage import Db, DbError
+from lxxl.lib.config import Config
 from hashlib import md5
 import datetime
 

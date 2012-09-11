@@ -1,9 +1,9 @@
-from lib import router, output
-from lib.app import Controller, Error
-from lib.storage import Db
-from lib.flush import FlushRequest
+from lxxl.lib import router, output
+from lxxl.lib.app import Controller, Error
+from lxxl.lib.storage import Db
+from lxxl.lib.flush import FlushRequest
 
-from model.users import User, UserFactory, Duplicate
+from lxxl.model.users import User, UserFactory, Duplicate
 
 import datetime
 

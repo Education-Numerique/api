@@ -1,5 +1,5 @@
-from lib import storage, output
-from lib.config import Config
+from lxxl.lib import storage, output
+from lxxl.lib.config import Config
 from hashlib import sha1
 import python_digest
 

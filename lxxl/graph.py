@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import os
 import sys
+import pkg_resources
 
 # insert contrib libs just after current directory
-ROOT = os.path.dirname(__file__)
+ROOT = os.path.join(pkg_resources.get_distribution('lxxl').location, 'lxxl')
 
-from lib.config import Config
-from lib import log, app, storage
+from lxxl.lib.config import Config
+from lxxl.lib import log, app, storage
 
 CONFIG_FILE = os.path.join(ROOT, 'conf', 'common.yml')
 STORAGE_FILE = os.path.join(ROOT, 'conf', 'storage.yml')

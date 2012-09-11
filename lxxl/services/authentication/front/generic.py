@@ -1,5 +1,5 @@
-from lib import router, output, auth, app
-from lib.app import Error, Controller
+from lxxl.lib import router, output, auth, app
+from lxxl.lib.app import Error, Controller
 
 
 class Generic(router.Root):

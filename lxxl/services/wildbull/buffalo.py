@@ -1,5 +1,5 @@
-from lib import router, output
-from lib.app import Error, Controller
+from lxxl.lib import router, output
+from lxxl.lib.app import Error, Controller
 import requests
 
 

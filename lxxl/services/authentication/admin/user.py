@@ -1,5 +1,5 @@
-from lib import router, output, storage, app
-from model.auth import users
+from lxxl.lib import router, output, storage, app
+from lxxl.model.auth import users
 
 
 class User(router.Root):

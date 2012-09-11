@@ -1,5 +1,5 @@
-from lib import router, output, app
-from model.auth import access
+from lxxl.lib import router, output, app
+from lxxl.model.auth import access
 
 
 class Key(router.Root):

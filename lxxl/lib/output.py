@@ -1,10 +1,10 @@
-from lib import app
+from . import app
 import time
 import json
 import re
 import datetime
 import hashlib
-from lib.utils import deepmerge
+from .utils import deepmerge
 
 
 def error(msg, code=400, internal=100):
