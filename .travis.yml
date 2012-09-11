@@ -5,3 +5,6 @@ python:
 install: "python setup.py install"
 # command to run tests
 script: lxxl.graph
+services:
+  - mongodb
+  - memcached
