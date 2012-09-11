@@ -1,5 +1,9 @@
 clients.lxxl.api
-======================
+=========================
+
+
+.. image:: https://secure.travis-ci.org/Education-Numerique/api.png
+        :target: http://travis-ci.org/Education-Numerique/api
 
 Api services for lxxl.
 
