@@ -1,9 +1,0 @@
-pyyaml
-webob
-requests
-python3-digest
-python3-memcached
-pymongo
-WTForms
-mailsnake
-pil
