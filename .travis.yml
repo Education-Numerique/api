@@ -5,7 +5,6 @@ python:
 install: "python setup.py install"
 before_script:
   - "lxxl start"
-  - "curl -iv http://localhost:8083/1.0/users/"
 after_script:
   - "lxxl stop"
 # command to run tests
