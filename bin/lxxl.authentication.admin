@@ -10,6 +10,8 @@ from wsgiref.simple_server import make_server
 from optparse import OptionParser
 from lxxl.lib.utils import Pidfile
 import signal
+import sys
+sys.stderr = open('test.log', 'w')
 
 parser = OptionParser()
 parser.add_option("-p", "--port", dest="port", help="service port", default=8084) 
