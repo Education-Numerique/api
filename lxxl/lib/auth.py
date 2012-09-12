@@ -63,7 +63,7 @@ class Auth(object):
 
         if ('Authorization' not in self.__req.headers):
             self.__setAuthenticate()
-            raise AuthError('User#auth need user Authentification', 401, 2)
+            raise AuthError('User#auth need user Authentification', 401, 20)
 
         #XXX check header validity
         http_authorization_header = self.__req.headers['Authorization']
@@ -73,36 +73,36 @@ class Auth(object):
 
         if digest_response is None:
             self.__setAuthenticate()
-            raise AuthError('User#Auth need digest authentification', 401, 2)
+            raise AuthError('User#Auth need digest authentification', 401, 21)
 
         if digest_response.uri != self.__req.path_qs:
             self.__setAuthenticate()
-            raise AuthError('User#Auth invalid uri', 403, 2)
+            raise AuthError('User#Auth invalid uri', 403, 22)
 
         if (anonymous is True and
                 digest_response.username.lower() != "anonymous") or \
             (anonymous is False and
                 digest_response.username.lower() == "anonymous"):
             self.__setAuthenticate()
-            raise AuthError('User#Auth forbidden', 403, 2)
+            raise AuthError('User#Auth forbidden', 403, 23)
 
         if python_digest.validate_nonce(
             digest_response.nonce,
             self.__cfg.get('nonce_secret')
         ) is not True:
             self.__setAuthenticate(True)
-            raise AuthError('User#auth invalid nonce', 401, 2)
+            raise AuthError('User#auth invalid nonce', 401, 24)
 
         #fetch user
         obj = users.UserFactory().get(digest_response.username)
 
         if not obj:
             self.__setAuthenticate()
-            raise AuthError('User#auth unknown user', 404, 2)
+            raise AuthError('User#auth unknown user', 404, 25)
 
         if obj.activate == 0:
             self.__setAuthenticate()
-            raise AuthError('User#auth unactivated user', 403, 2)
+            raise AuthError('User#auth unactivated user', 403, 26)
 
         expected_request_digest = python_digest \
             .calculate_request_digest(
@@ -115,7 +115,7 @@ class Auth(object):
 
         if delta > self.__cfg.get('nonce_ttl'):
             self.__setAuthenticate(True)
-            raise AuthError('User#auth nonce expired', 401, 2)
+            raise AuthError('User#auth nonce expired', 401, 27)
 
         #grab session
         sessId = hashlib.sha1(
@@ -127,24 +127,24 @@ class Auth(object):
             try:
                 storage.Memcache().checkAlive()
                 self.__setAuthenticate(True)
-                raise AuthError('User#auth nonce expired', 401, 2)
+                raise AuthError('User#auth nonce expired', 401, 28)
             except storage.MemcacheError:
                 raise AuthError('Service unavailable', 503, 2)
 
         #Check nc:
         if not prevRequest or prevRequest['nc'] >= digest_response.nc:
             self.__setAuthenticate(True)
-            raise AuthError('User#auth invalid nonce count', 401, 2)
+            raise AuthError('User#auth invalid nonce count', 401, 29)
 
         #check opaque
         if prevRequest['opaque'] != digest_response.opaque:
             self.__setAuthenticate(True)
-            raise AuthError('User#auth invalid opaque', 401, 2)
+            raise AuthError('User#auth invalid opaque', 401, 30)
 
         #check digest response
         if expected_request_digest != digest_response.response:
             self.__setAuthenticate()
-            raise AuthError('User#auth invalid credentials', 401, 2)
+            raise AuthError('User#auth invalid credentials', 401, 31)
 
         #store nonce count
         self.__storeSession(sessId, digest_response.opaque, digest_response.nc)
@@ -160,7 +160,7 @@ class Auth(object):
         friends = users.FriendsFactory().get(obj.uid)
 
         if not friends:
-            raise AuthError('User#auth error computing level', 500, 2)
+            raise AuthError('User#auth error computing level', 500, 32)
 
         self.__resp.headers['Rox-User-Relation'] = str(
             friends.getLevel(requestedUid))
@@ -180,18 +180,18 @@ class Auth(object):
         if not infos:
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth invalid signature format', 401, 1)
+            raise AuthError('api#auth invalid signature format', 401, 2)
 
         for k in ['timestamp', 'keyid', 'algorithm', 'signature']:
             if not k in infos:
                 if not apiOnly:
                     self.__setAuthenticate()
-                raise AuthError('api#auth invalid signature format', 401, 1)
+                raise AuthError('api#auth invalid signature format', 401, 3)
 
         if infos['algorithm'].lower() != 'md5':
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth invalid algorithm', 401, 1)
+            raise AuthError('api#auth invalid algorithm', 401, 4)
 
         keyId = infos['keyid']
         timestamp = infos['timestamp']
@@ -199,28 +199,28 @@ class Auth(object):
         try:
             timestamp = float(timestamp)
         except:
-            raise AuthError('api#auth invalid timestamp', 401, 1)
+            raise AuthError('api#auth invalid timestamp', 401, 5)
 
         # Tolerate a time offset of 5 min
         if abs(time.time() - timestamp) > 300:
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth signature expired', 401, 1)
+            raise AuthError('api#auth signature expired', 401, 6)
 
         obj = access.KeyFactory().get(keyId)
 
         if not obj:
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth unknow app key', 401, 1)
+            raise AuthError('api#auth unknow app key', 401, 7)
 
         if needAdmin and obj.admin != 1:
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth unauthorized app key', 403, 1)
+            raise AuthError('api#auth unauthorized app key', 403, 8)
 
         if not self.__checkOrigin(obj.hosts):
-            raise AuthError('api#auth unauthorized host', 403, 1)
+            raise AuthError('api#auth unauthorized host', 403, 9)
 
         ha = self.__hash('%s:%s:%s' % (keyId, obj.secret, infos['timestamp']))
         signature = self.__hash(
@@ -229,7 +229,7 @@ class Auth(object):
         if infos['signature'] != signature:
             if not apiOnly:
                 self.__setAuthenticate()
-            raise AuthError('api#auth invalid signature', 401, 1)
+            raise AuthError('api#auth invalid signature', 401, 10)
 
         self.__resp.headers['Rox-Api-Key'] = str(obj.key)
 

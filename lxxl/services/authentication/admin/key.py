@@ -10,6 +10,7 @@ class Key(router.Root):
             keyid = req.POST.get('keyid')
             isAdmin = req.POST.get('xxxadmin')
             hosts = req.POST.get('hosts').split(',')
+            secret = req.POST.get('secret')
 
             if not keyid:
                 output.error('invalid format', 400)
@@ -22,7 +23,11 @@ class Key(router.Root):
             apiKey = access.ApiKey()
             apiKey.key = keyid
             apiKey.hosts = hosts
-            apiKey.generateSecret()
+
+            if not secret:
+                apiKey.generateSecret()
+            else:
+                apiKey.secret = secret
 
             if isAdmin:
                 apiKey.admin = True

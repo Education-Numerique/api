@@ -56,6 +56,5 @@ class KeyFactory:
 
         id = c.insert(obj.__dict__)
         obj._id = id
-        print(id)
 
         return obj
