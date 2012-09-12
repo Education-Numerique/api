@@ -4,8 +4,10 @@ python:
 # command to install dependencies
 install: "python setup.py install >> install.log"
 before_script:
-  - "lxxl.graph"
+  - "lxxl start"
   - "curl -iv http://localhost:8083/1.0/users/"
+after_script:
+  - "lxxl stop"
 # command to run tests
 script: nosetests
 services:
