@@ -2,7 +2,7 @@ language: python
 python:
   - "3.2"
 # command to install dependencies
-install: "python setup.py install >> install.log"
+install: "python setup.py install"
 before_script:
   - "lxxl start"
   - "curl -iv http://localhost:8083/1.0/users/"
