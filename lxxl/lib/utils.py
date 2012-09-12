@@ -1,7 +1,9 @@
 import collections
 import time
 import random
-
+import errno
+import os
+import tempfile
 
 def randomBase62(length=16):
     import random
@@ -43,3 +45,77 @@ def deepmerge(a, b):
                 else:
                     current_dst[key] = current_src[key]
     return dst
+
+
+# -*- coding: utf-8 -
+#
+# This file is part of gunicorn released under the MIT license.
+# See the NOTICE for more information.
+
+
+
+
+class Pidfile(object):
+    """\
+    Manage a PID file. If a specific name is provided
+    it and '"%s.oldpid" % name' will be used. Otherwise
+    we create a temp file using os.mkstemp.
+    """
+
+    def __init__(self, fname):
+        self.fname = fname
+        self._fsname = os.path.join(tempfile.gettempdir(), fname)
+        self.pid = None
+
+    def create(self, pid):
+        oldpid = self.validate()
+        if oldpid:
+            if oldpid == os.getpid():
+                return
+            raise RuntimeError("Already running on PID %s " \
+                "(or pid file '%s' is stale)" % (os.getpid(), self.fname))
+
+        self.pid = pid
+
+        # Write pidfile
+        fd, fname = tempfile.mkstemp()
+        os.write(fd, ("%s\n" % self.pid).encode('utf-8'))
+        os.rename(fname, self._fsname)
+        os.close(fd)
+
+        # set permissions to -rw-r--r--
+        os.chmod(self._fsname, 420)
+
+    def unlink(self):
+        """ delete pidfile"""
+        try:
+            with open(self._fsname, "r") as f:
+                pid1 =  int(f.read() or 0)
+
+            if pid1 == self.pid:
+                os.unlink(self._fsname)
+        except:
+            pass
+
+    def validate(self):
+        """ Validate pidfile and make it stale if needed"""
+        if not self._fsname:
+            return
+        try:
+            with open(self._fsname, "r") as f:
+                wpid = int(f.read() or 0)
+
+                if wpid <= 0:
+                    return
+
+                try:
+                    os.kill(wpid, 0)
+                    return wpid
+                except OSError as e:
+                    if e.errno == errno.ESRCH:
+                        return
+                    raise
+        except IOError as e:
+            if e.errno == errno.ENOENT:
+                return
+            raise

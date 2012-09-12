@@ -8,7 +8,7 @@ from os import fork, chdir, setsid, umask
 from sys import exit
 from wsgiref.simple_server import make_server
 from optparse import OptionParser
-import zc.lockfile
+from lxxl.lib.utils import Pidfile
 import signal
 
 parser = OptionParser()
@@ -58,33 +58,14 @@ routing = routing + cfg.get('routing')
 application = app.Controller()
 application.addRoutingFromConfig('*', routing)
 
-lockFilePath = os.path.join(os.path.dirname(__file__), 'lxxl.authentication.admin.pid')
-
-def check_pid(pid):        
-    """ Check For the existence of a unix pid. """
-    try:
-        os.kill(pid, 0)
-    except OSError:
-        return False
-    else:
-        return True
+pidfile = Pidfile('lxxl.authentication.admin.pid')
 
 def start_server():
     print('LxxL authentication admin server is running (#%s). :%s' % (os.getpid(), options.port))
     make_server('localhost', options.port, application).serve_forever()
 
 if __name__ == '__main__':
-    currentPid = None
-    if os.path.exists(lockFilePath):
-        try:
-            fileHandler = open(lockFilePath)
-            currentPid = int(fileHandler.read())
-            fileHandler.close()
-        except:
-            pass
-
-    if currentPid and not check_pid(currentPid):
-        currentPid = None
+    currentPid = pidfile.validate()
 
     if currentPid and command == 'start':
         print('LxxL authentication admin server already running')
@@ -101,7 +82,7 @@ if __name__ == '__main__':
     if currentPid and (command == 'stop' or command == 'restart'):
         print('Stopping LxxL authentication admin server #%s ...' % currentPid)
         os.kill(currentPid, signal.SIGTERM)
-        os.remove(lockFilePath)
+        pidfile.unlink()
         print('Server stopped')
         if command == 'stop':
             exit(1)
@@ -128,5 +109,5 @@ if __name__ == '__main__':
     except OSError as e:
         exit(1)
 
-    lock = zc.lockfile.LockFile(lockFilePath)
+    pidfile.create(os.getpid())
     start_server()
