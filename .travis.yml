@@ -9,7 +9,7 @@ before_script:
 after_script:
   - "lxxl stop"
 # command to run tests
-script: nosetests
+script: "nosetests tests/*.py -v"
 services:
   - mongodb
   - memcached
