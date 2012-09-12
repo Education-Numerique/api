@@ -172,7 +172,7 @@ class Controller:
                 self._resp.headers['Rox-Adult'] = "1"
                 self._resp.headers['Access-Control-Allow-Origin'] = '*'
 
-            if (flush == True):
+            if (flush is True):
                 resp = self._resp
                 self._resp = None
                 self._req = None
@@ -216,6 +216,6 @@ class ServiceLoader:
         return self._instance[id]
 
     def __load(self, service, module):
-        print ('===> Mounting %s::%s service' % (service, module))
-        exec ('from lxxl.services.%s import %s' % (service.lower(), module))
+        log.info('===> Mounting %s::%s service' % (service, module))
+        exec('from lxxl.services.%s import %s' % (service.lower(), module))
         return locals()[module]()

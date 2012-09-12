@@ -26,7 +26,8 @@ requires = [
     'pymongo',
     'WTForms',
     'mailsnake',
-    'pil'
+    'pil',
+    'zc.lockfile'
 ]
 
 dep_links = [
@@ -44,6 +45,7 @@ setup(
     url='http://education-numerique.github.com/api/',
     packages=find_packages(),
     scripts=[
+        'bin/lxxl',
         'bin/lxxl.graph',
         'bin/lxxl.wildbull',
         'bin/lxxl.authentication.admin',

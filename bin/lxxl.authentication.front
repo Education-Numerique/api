@@ -3,8 +3,36 @@
 
 import os
 import sys
-
 import pkg_resources
+from os import fork, chdir, setsid, umask
+from sys import exit
+from wsgiref.simple_server import make_server
+from optparse import OptionParser
+import zc.lockfile
+import signal
+
+parser = OptionParser()
+parser.add_option("-p", "--port", dest="port", help="service port", default=8082) 
+(options, args) = parser.parse_args()
+
+try:
+    options.port = int(options.port)
+except:
+    options.port = 8082
+
+if len(args) == 0:
+    print('Please use one of the following \
+        command (start|stop|restart|status)')
+    exit(1)
+
+command = args.pop(0)
+
+if not command in ['start', 'stop', 'restart', 'status']:
+    print('Please use one of the following \
+        command (start|stop|restart|status)')
+    exit(1)
+
+
 
 # insert contrib libs just after current directory
 ROOT = os.path.join(pkg_resources.get_distribution('lxxl').location, 'lxxl')
@@ -32,10 +60,78 @@ routing = routing + cfg.get('routing')
 application = app.Controller()
 application.addRoutingFromConfig('*', routing)
 
+lockFilePath = os.path.join(os.path.dirname(__file__), 'lxxl.authentication.front.pid')
 
-#log.info('Roxee Data server is running (#%s).' % os.getpid())
 
+def check_pid(pid):        
+    """ Check For the existence of a unix pid. """
+    try:
+        os.kill(pid, 0)
+    except OSError:
+        return False
+    else:
+        return True
+
+def start_server():
+    print('LxxL authentication server is running (#%s). :%s' % (os.getpid(), options.port))
+    make_server('localhost', options.port, application).serve_forever()
 
 if __name__ == '__main__':
-    from wsgiref.simple_server import make_server
-    make_server('localhost', 8082, application).serve_forever()
+    currentPid = None
+    if os.path.exists(lockFilePath):
+        try:
+            fileHandler = open(lockFilePath)
+            currentPid = int(fileHandler.read())
+            fileHandler.close()
+        except:
+            pass
+
+    try:
+        check_pid(currentPid)
+    except:
+        currentPid = None
+
+    if currentPid and command == 'start':
+        print('LxxL authentication server already running')
+        exit(1)
+
+    if currentPid and command == 'status':
+        print('LxxL authentication server is running #pid %s' % currentPid)
+        exit(1)
+
+    if not currentPid and command == 'status':
+        print('LxxL authentication server  is not running')
+        exit(1)
+
+    if currentPid and (command == 'stop' or command == 'restart'):
+        print('Stopping LxxL authentication server #%s ...' % currentPid)
+        os.kill(currentPid, signal.SIGTERM)
+        os.remove(lockFilePath)
+        print('Server stopped')
+        if command == 'stop':
+            exit(1)
+
+    if not currentPid and command == 'stop':
+        print('LxxL authentication is not running. Nothing to stop')
+        exit(1)
+
+    try:
+        pid = fork()
+        if pid > 0:
+            exit(0)
+    except OSError as e:
+        exit(1)
+
+    chdir("/")
+    setsid()
+    umask(0)
+
+    try:
+        pid = fork()
+        if pid > 0:
+            exit(0)
+    except OSError as e:
+        exit(1)
+
+    lock = zc.lockfile.LockFile(lockFilePath)
+    start_server()
