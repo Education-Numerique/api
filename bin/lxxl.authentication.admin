@@ -83,9 +83,7 @@ if __name__ == '__main__':
         except:
             pass
 
-    try:
-        check_pid(currentPid)
-    except:
+    if currentPid and not check_pid(currentPid):
         currentPid = None
 
     if currentPid and command == 'start':
