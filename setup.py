@@ -18,7 +18,6 @@ if major < 3 or minor < 2:
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 requires = [
-    'zc.lockfile',
     'pyyaml',
     'webob',
     'requests',
