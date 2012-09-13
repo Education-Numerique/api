@@ -86,7 +86,6 @@ class Controller:
             return self._json
 
         def checkToken(self):
-            print(sorted(self._req.headers.items()))
             token = self.getToken()
             info = token.split(':')
 

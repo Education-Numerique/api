@@ -18,7 +18,6 @@ class AsyncMailer(threading.Thread):
 
     def run(self):
         m = mandrill.messages.send_template(**self.params)
-        print('====> send email :  %s' % m)
 
         return
 
@@ -49,6 +48,5 @@ class AsyncUserRegister(threading.Thread):
 
     def run(self):
         m = mailchimp.listSubscribe(**self.params)
-        print('====> mailchimp update user :  %s' % m)
 
         return

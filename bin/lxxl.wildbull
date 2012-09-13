@@ -19,7 +19,6 @@ parser.add_option("-v", "--verbose", action="store_true", dest="verbose")
 
 if not options.verbose:
     sys.stderr = open('test.log', 'w')
-    sys.stdout = open('test.out.log', 'w')
 
 try:
     options.port = int(options.port)
