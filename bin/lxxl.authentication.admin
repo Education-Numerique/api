@@ -10,12 +10,16 @@ from wsgiref.simple_server import make_server
 from optparse import OptionParser
 from lxxl.lib.utils import Pidfile
 import signal
-import sys
-#sys.stderr = open('test.log', 'w')
 
 parser = OptionParser()
-parser.add_option("-p", "--port", dest="port", help="service port", default=8084) 
+parser.add_option("-p", "--port", dest="port", help="service port", default=8084)
+parser.add_option("-v", "--verbose", action="store_true", dest="verbose") 
+
 (options, args) = parser.parse_args()
+
+if not options.verbose:
+    sys.stderr = open('test.log', 'w')
+    sys.stdout = open('test.out.log', 'w')
 
 try:
     options.port = int(options.port)

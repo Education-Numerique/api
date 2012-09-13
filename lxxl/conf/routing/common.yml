@@ -5,3 +5,13 @@ common_routing:
         module: Prob
         action: alive
     method: get
+
+  - url: ^/:version/connect/gate/:gate/gate.html$
+    vars:
+        version: ([0-9]\.[0-9])
+        gate: ([0-9]\.[0-9])
+    params:
+        service: common
+        module: Gate
+        action: fetch
+    method: get
