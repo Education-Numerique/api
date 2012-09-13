@@ -11,7 +11,7 @@ from optparse import OptionParser
 import signal
 from lxxl.lib.utils import Pidfile
 import sys
-sys.stderr = open('test.log', 'w')
+#sys.stderr = open('test.log', 'w')
 
 parser = OptionParser()
 parser.add_option("-p", "--port", dest="port", help="service port", default=8083) 

@@ -28,6 +28,7 @@ class Account(router.Root):
 
             #UID
             id = Db().get('users').increment()
+            user.generateUid(id)
 
             #activation code
             user.generateActivationCode()
@@ -40,7 +41,7 @@ class Account(router.Root):
 
             #Init account on admin service
             try:
-                resp = AdminRequest().request('/1.0/user', {
+                resp = AdminRequest().request('/1.0/user/', {
                     'uid': user.uid,
                     'login': user.email.lower(),
                     'password': form.password.data}
@@ -63,38 +64,41 @@ class Account(router.Root):
                 'updated': datetime.datetime.utcnow()
             }, True)
 
-            #send mail
-            AsyncMailer(
-                template_name='email-validation',
-                template_content=[{
-                    'name': 'validation_code',
-                    'content': user.activation_code
-                }],
-                global_merge_vars=[
-                ],
-                message={
-                    'subject': 'Validate your e-mail at Roxee',
-                    'from_email': 'no-reply@roxee.tv',
-                    'from_name': 'Roxee Project',
-                    'headers': {},
-                    'to': [
-                        {
-                            'email': user.email,
-                            'name': user.username
-                        }
+            if user.email != 'void@webitup.fr':
+                #send mail
+                AsyncMailer(
+                    template_name='email-validation',
+                    template_content=[{
+                        'name': 'validation_code',
+                        'content': user.activation_code
+                    }],
+                    global_merge_vars=[
                     ],
-                    'metadata': {
-                        'uid': user.uid,
-                        'email_validation_code': user.activation_code
-                    },
-                    'tags': ['email-validation'],
-                    'google_analytics_domains': ['beta.roxee.tv'],
-                    'google_analytics_campaign': ['internal_email_validation'],
-                    'auto_text': True,
-                    'track_opens': True,
-                    'track_clicks': True
-                }
-            ).start()
+                    message={
+                        'subject': 'Validate your e-mail at Lxxl',
+                        'from_email': 'void@webitup.fr',
+                        'from_name': 'Education & Numérique',
+                        'headers': {},
+                        'to': [
+                            {
+                                'email': user.email,
+                                'name': user.username
+                            }
+                        ],
+                        'metadata': {
+                            'uid': user.uid,
+                            'email_validation_code': user.activation_code
+                        },
+                        'tags': ['email-validation'],
+                        'google_analytics_domains': ['beta.lxxl.com'],
+                        'google_analytics_campaign': [
+                            'internal_email_validation'
+                        ],
+                        'auto_text': True,
+                        'track_opens': True,
+                        'track_clicks': True
+                    }
+                ).start()
 
             bday = ''
             if profile['birthdate']:
@@ -105,7 +109,7 @@ class Account(router.Root):
 
             #register user in mailchimp internal user list
             AsyncUserRegister(
-                email_address=beta.email,
+                email_address=user.email,
                 #use the invitation email and update it
                 double_optin=False,
                 update_existing=True,
@@ -168,32 +172,33 @@ class Account(router.Root):
             Db().get('users').update({'uid': user.uid}, user)
 
             #send mail
-            AsyncMailer(
-                template_name='registered',
-                template_content=[],
-                global_merge_vars=[],
-                message={
-                    'subject': 'Welcome to Roxee Private Beta !',
-                    'from_email': 'no-reply@roxee.tv',
-                    'from_name': 'Roxee Project',
-                    'headers': {},
-                    'to': [
-                        {
-                            'email': user.email,
-                            'name': user.username
-                        }
-                    ],
-                    'metadata': {
-                        'uid': user.uid
-                    },
-                    'tags': ['welcome'],
-                    'google_analytics_domains': ['beta.roxee.tv'],
-                    'google_analytics_campaign': ['internal_registered'],
-                    'auto_text': True,
-                    'track_opens': True,
-                    'track_clicks': True
-                }
-            ).start()
+            if user.email != 'void@webitup.fr':
+                AsyncMailer(
+                    template_name='registered',
+                    template_content=[],
+                    global_merge_vars=[],
+                    message={
+                        'subject': 'Welcome to LxxL !',
+                        'from_email': 'void@webitup.fr',
+                        'from_name': 'Education & Numérique',
+                        'headers': {},
+                        'to': [
+                            {
+                                'email': user.email,
+                                'name': user.username
+                            }
+                        ],
+                        'metadata': {
+                            'uid': user.uid
+                        },
+                        'tags': ['welcome'],
+                        'google_analytics_domains': ['beta.roxee.tv'],
+                        'google_analytics_campaign': ['internal_registered'],
+                        'auto_text': True,
+                        'track_opens': True,
+                        'track_clicks': True
+                    }
+                ).start()
 
             output.success('user activated', 200)
         except Error:

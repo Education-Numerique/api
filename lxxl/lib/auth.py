@@ -60,7 +60,6 @@ class Auth(object):
             output.error(str(msg), msg.getCode(), msg.getInternal())
 
     def checkUserId(self, requestedUid=None, anonymous=False):
-
         if ('Authorization' not in self.__req.headers):
             self.__setAuthenticate()
             raise AuthError('User#auth need user Authentification', 401, 20)
@@ -150,20 +149,10 @@ class Auth(object):
         self.__storeSession(sessId, digest_response.opaque, digest_response.nc)
 
         if anonymous is False:
-            self.__resp.headers['Rox-User-Token'] = str(obj.getToken())
-            self.__resp.headers['Rox-User-id'] = str(obj.uid)
+            self.__resp.headers['X-Lxxl-User-Token'] = str(obj.getToken())
+            self.__resp.headers['X-Lxxl-User-id'] = str(obj.uid)
 
-        #get level
-        if not requestedUid:
-            return True
-
-        friends = users.FriendsFactory().get(obj.uid)
-
-        if not friends:
-            raise AuthError('User#auth error computing level', 500, 32)
-
-        self.__resp.headers['Rox-User-Relation'] = str(
-            friends.getLevel(requestedUid))
+        self.__resp.headers['X-Lxxl-User-Relation'] = "1"
 
         return True
 
@@ -231,12 +220,12 @@ class Auth(object):
                 self.__setAuthenticate()
             raise AuthError('api#auth invalid signature', 401, 10)
 
-        self.__resp.headers['Rox-Api-Key'] = str(obj.key)
+        self.__resp.headers['X-Lxxl-Api-Key'] = str(obj.key)
 
         if obj.admin is True:
-            self.__resp.headers['Rox-Api-Type'] = "1"
+            self.__resp.headers['X-Lxxl-Api-Type'] = "1"
         else:
-            self.__resp.headers['Rox-Api-Type'] = "0"
+            self.__resp.headers['X-Lxxl-Api-Type'] = "0"
 
         return True
 

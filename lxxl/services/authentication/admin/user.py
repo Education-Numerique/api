@@ -1,4 +1,5 @@
 from lxxl.lib import router, output, storage, app
+from lxxl.lib.config import Config
 from lxxl.model.auth import users
 
 
@@ -64,7 +65,7 @@ class User(router.Root):
                 output.error('unknown acess', 404)
 
             user.setDigest(password)
-            storage.Db().get('users').update({
+            storage.Db().get('auth_users').update({
                 'login': login,
                 'uid': uid
             }, user)
@@ -93,7 +94,7 @@ class User(router.Root):
 
             user.activate = 1
 
-            storage.Db().get('users').update({
+            storage.Db().get('auth_users').update({
                 'login': login,
                 'uid': uid
             }, user)
@@ -123,7 +124,7 @@ class User(router.Root):
 
             user.activate = 0
 
-            storage.Db().get('users').update({
+            storage.Db().get('auth_users').update({
                 'login': login,
                 'uid': uid
             }, user)

@@ -86,11 +86,12 @@ class Controller:
             return self._json
 
         def checkToken(self):
+            print(sorted(self._req.headers.items()))
             token = self.getToken()
             info = token.split(':')
 
             if not token or len(info) != 2:
-                raise InvalidToken('Need rox-user-level')
+                raise InvalidToken('Need X-Lxxl-user-level')
 
             challenge = sha1((str(info[0]) + Config(
             ).get('token_secret')).encode('utf-8')).hexdigest()
@@ -101,19 +102,19 @@ class Controller:
             raise InvalidToken('failed to authenticate token')
 
         def getApiKey(self):
-            return self._environ.get('HTTP_ROX_API_KEY', None)
+            return self._environ.get('HTTP_X_LXXL_API_KEY', None)
 
         def getApiType(self):
-            return int(self._environ.get('HTTP_ROX_API_TYPE', 0))
+            return int(self._environ.get('HTTP_X_LXXL_API_TYPE', 0))
 
         def getRelation(self):
-            return int(self._environ.get('HTTP_ROX_USER_RELATION', 0))
+            return int(self._environ.get('HTTP_X_LXXL_USER_RELATION', 0))
 
         def getToken(self):
-            return self._environ.get('HTTP_ROX_USER_TOKEN', '')
+            return self._environ.get('HTTP_X_LXXL_USER_TOKEN', '')
 
         def getInstanceId(self):
-            return self._environ.get('HTTP_ROX_INSTANCE_ID', '')
+            return self._environ.get('HTTP_X_LXXL_INSTANCE_ID', '')
 
         def getOriginalHost(self):
             host = self._environ.get('HTTP_HOST', '')
@@ -127,7 +128,7 @@ class Controller:
             return self._environ.get('HTTP_HOST', '')
 
         def getUid(self):
-            return self._environ.get('HTTP_ROX_USER_ID', None)
+            return self._environ.get('HTTP_X_LXXL_USER_ID', None)
 
         def addRouting(self, domain, urls):
             self._router[domain] = urls
@@ -169,7 +170,7 @@ class Controller:
             if (self._resp is None):
                 self._resp = Response(
                     content_type='application/json', charset='UTF-8')
-                self._resp.headers['Rox-Adult'] = "1"
+                self._resp.headers['X-Lxxl-Adult'] = "1"
                 self._resp.headers['Access-Control-Allow-Origin'] = '*'
 
             if (flush is True):

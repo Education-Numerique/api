@@ -4,6 +4,7 @@ python:
 # command to install dependencies
 install: "python setup.py install &> install.log"
 before_script:
+  - "mongo lxxl --eval 'db.dropDatabase();"
   - "lxxl start"
 after_script:
   - "lxxl stop"

@@ -20,12 +20,12 @@ class User:
             self.login.lower(), self.realm, password)
 
     def getToken(self):
-        salt = "%s%s".encode('utf-8') % (
+        salt = "%s%s" % (
             self.uid,
             Config().get('token_secret')
         )
 
-        return "%s:%s" % (self.uid, sha1(salt).hexdigest())
+        return "%s:%s" % (self.uid, sha1(salt.encode('utf-8')).hexdigest())
 
 
 class UserFactory:

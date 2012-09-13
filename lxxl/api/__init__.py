@@ -30,15 +30,26 @@ class Lxxl(object):
             for x in ['users']:
                 setattr(self, x, Lxxl(key, secret, host, version, x))
 
+    def setCredentials(self, login, password):
+        LxxlRequest.setCredentials(login, password)
+
     def call(self, method, params=None):
         try:
-            if params:
-                params = tuple(params.values())
-            else:
-                params = ''
+            # if params:
+            #     params = tuple(params.values())
+            # else:
+            #     params = ''
 
-            resp = self._r.get(
-                '/%s/%s/%s' % (self.api_section, method, '/'.join(params)))
+            if method == 'create':
+                resp = self._r.post('/%s/' % (self.api_section), params)
+            elif params.keys():
+                resp = self._r.post(
+                    '/%s/%s' % (self.api_section, method),
+                    params
+                )
+            else:
+                resp = self._r.get(
+                    '/%s/%s/%s' % (self.api_section, method, '/'.join(params)))
 
         except requests.exceptions.RequestException as e:
             raise HTTPRequestException(e)
@@ -68,6 +79,7 @@ class Lxxl(object):
 
 class LxxlRequest(object):
     SESSION = requests.session()
+    AUTH = None
 
     def __init__(self, key, secret, host=None, version=None):
         self.key = key
@@ -77,21 +89,31 @@ class LxxlRequest(object):
 
         self.api_url = "http://%s/%s" % (self.host, self.version)
         self.algo = "md5"
-
+        self._auth = None
         self._delta = 0
+
+    @classmethod
+    def setCredentials(self, login, password):
+        self.AUTH = HTTPDigestAuth(login, password)
 
     def get(self, url, params={}):
         return self.request('GET', url, params=params)
 
-    def request(self, method, url, **args):
+    def post(self, url, params={}):
+        return self.request('POST', url, data=params)
 
+    def request(self, method, url, **args):
         if 'headers' not in args:
             args['headers'] = {}
+
+        if LxxlRequest.AUTH:
+            args['auth'] = LxxlRequest.AUTH
 
         args['headers']['User-Agent'] = 'PyLxxl 0.1'
 
         args['hooks'] = {'pre_request': self._setSignature,
                          'response': self._postHook}
+
         return LxxlRequest.SESSION.request(method, '%s%s' % (
             self.api_url, url
         ), **args)

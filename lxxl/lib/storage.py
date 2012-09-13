@@ -220,7 +220,7 @@ class Memcache:
             if resp:
                 return True
 
-            check = self.set('internal_alive', True, 86400)
+            check = self.set('internal_alive', True)
             if not check:
                 raise MemcacheError('memcache is down')
 
