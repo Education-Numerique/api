@@ -268,4 +268,8 @@ class AccountCreateValidation(Form):
     ])
     password = TextField('password', [validators.Length(min=6, max=25)])
     gender = TextField('gender', [validators.Length(min=1, max=2)])
-    birthdate = DateTimeField('birthdate', format='%Y-%m-%d')
+    birthdate = DateTimeField(
+        'birthdate',
+        [validators.required()],
+        format='%Y-%m-%d'
+    )

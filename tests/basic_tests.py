@@ -71,7 +71,8 @@ class BasicTest(unittest.TestCase):
                 username="toto42",
                 gender=1,
                 password="toto42",
-                email="void@webitup.fr"
+                email="void@webitup.fr",
+                birthdate="1986-01-01"
             )
         except exceptions.HTTPRequestException as e:
             raise Exception(e.response.json)
@@ -84,7 +85,7 @@ class BasicTest(unittest.TestCase):
             raise Exception(e.response)
 
     def test_6_log_user(self):
-        """6. Login with the new user - good password"""
+        """6. Login with the new user"""
         try:
             api = Lxxl('TEST', 'TEST', host=self.api_url)
             api.setCredentials('void@webitup.fr', 'toto42')
