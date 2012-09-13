@@ -123,6 +123,9 @@ class Controller:
 
             return 'http://%s' % host
 
+        def getFullHost(self):
+            return self._environ.get('HTTP_HOST', '')
+
         def getHost(self):
             host = self._environ.get('HTTP_HOST', '')
 
