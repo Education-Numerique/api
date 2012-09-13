@@ -49,6 +49,7 @@ class Buffalo(router.Root):
                 
                 if 'X-Requested-With' in req.headers:
                     wildResponse.headers['X-WWW-Authenticate'] = wildResponse.headers['www-authenticate']
+                    del wildResponse.headers['www-authenticate']
 
                 output.success(resp.json, resp.status_code)
                 raise Error('break')
