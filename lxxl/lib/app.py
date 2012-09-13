@@ -124,7 +124,12 @@ class Controller:
             return 'http://%s' % host
 
         def getHost(self):
-            return self._environ.get('HTTP_HOST', '')
+            host = self._environ.get('HTTP_HOST', '')
+
+            if ':' in host:
+                host = host.split(':').pop(0)
+
+            return host
 
         def getUid(self):
             return self._environ.get('HTTP_X_LXXL_USER_ID', None)
