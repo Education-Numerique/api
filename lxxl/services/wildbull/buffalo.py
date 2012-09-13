@@ -47,7 +47,7 @@ class Buffalo(router.Root):
                 for (k, v) in resp.headers.items():
                     wildResponse.headers[k.lower()] = v
                 
-                if 'X-Requested-With' in req.headers:
+                if 'X-Requested-With' in req.headers and 'www-authenticate' in wildResponse.headers:
                     wildResponse.headers['X-WWW-Authenticate'] = wildResponse.headers['www-authenticate']
                     del wildResponse.headers['www-authenticate']
 
