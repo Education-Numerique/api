@@ -23,3 +23,4 @@ services = ['lxxl.wildbull', 'lxxl.graph', 'lxxl.authentication.front', 'lxxl.au
 
 for service in services:
     subprocess.call("%s %s -v" % (service, command), shell=True)
+exit(0)

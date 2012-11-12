@@ -16,4 +16,4 @@ def uwsgi():
 
     e = VirtualEnv()
     e.create('/opt/puke/lxxl', 'python3')
-    e.sh('python3 setup.py install')
+    e.sh('python3 setup.py install', output=False, header="Install lxxl")
