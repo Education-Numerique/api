@@ -233,18 +233,23 @@ class Auth(object):
         origin = False
         xgate = False
 
+        print('****** whitelist', whitelist)
+
         if 'origin' in self.__req.headers:
-            origin = self.__req.headers['origin'].lower(
-            ).replace('http://', '').replace('https://', '')
+            origin = self.__req.headers['origin'].lower()
+                               .replace('http://', '')
+                               .replace('https://', '')
             if ':' in origin:
                 origin = origin.split(':').pop(0)
 
         if 'x-gate-origin' in self.__req.headers:
-            xgate = self.__req.headers['x-gate-origin'].lower(
-            ).replace('http://', '').replace('https://', '')
+            xgate = self.__req.headers['x-gate-origin'].lower()
+                              .replace('http://', '')
+                              .replace('https://', '')
             if ':' in xgate:
                 xgate = xgate.split(':').pop(0)
 
+        print('****** hosts', origin, xgate)
         if origin:
 
             if origin == app.Controller().getHost():
