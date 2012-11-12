@@ -237,15 +237,17 @@ class Auth(object):
 
         if 'origin' in self.__req.headers:
             origin = self.__req.headers['origin'].lower()
-                               .replace('http://', '')
-                               .replace('https://', '')
+            origin = origin.replace('http://', '')
+            origin = origin.replace('https://', '')
+
             if ':' in origin:
                 origin = origin.split(':').pop(0)
 
         if 'x-gate-origin' in self.__req.headers:
             xgate = self.__req.headers['x-gate-origin'].lower()
-                              .replace('http://', '')
-                              .replace('https://', '')
+            xgate = xgate.replace('http://', '')
+            xgate = xgate.replace('https://', '')
+            
             if ':' in xgate:
                 xgate = xgate.split(':').pop(0)
 
