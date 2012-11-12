@@ -29,7 +29,10 @@ class Buffalo(router.Root):
                 if not v:
                     continue
 
-                if k.lower() in ['host', 'keep-alive']:
+                if not k.lower() in ['host', 'accept-encoding', 'keep-alive', 'content-length', 'transfer-encoding']:
+                    continue
+
+                if '_' in k:
                     continue
 
                 sendHeaders[k] = v
@@ -39,14 +42,14 @@ class Buffalo(router.Root):
             else:
                 data = {}
 
-            # try:
-            resp = requests.request(req.method, '%s%s' % (
-                'http://localhost:8082',
-                req.path_qs
-            ), headers=sendHeaders, data=data, prefetch=True)
+            try:
+                resp = requests.request(req.method, '%s%s' % (
+                    'http://localhost:8082',
+                    req.path_qs
+                ), headers=sendHeaders, data=data, prefetch=True)
 
-            # except:
-            #     output.error('Auth Backend fail', 503)
+            except:
+                output.error('Auth Backend fail', 503)
 
             if int(resp.status_code / 100) != 2:
                 for (k, v) in resp.headers.items():
