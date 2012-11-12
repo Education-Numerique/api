@@ -29,7 +29,7 @@ class Buffalo(router.Root):
                 if not v:
                     continue
 
-                if k.lower() in ['host', 'accept-encoding', 'keep-alive', 'content-length', 'transfer-encoding']:
+                if k.lower() in ['accept-encoding', 'keep-alive', 'content-length', 'transfer-encoding']:
                     continue
 
                 if '_' in k:
