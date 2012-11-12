@@ -54,8 +54,6 @@ class Account(router.Root):
                 output.error('registration troubles ...', 500)
 
             profile = {}
-            profile['gender'] = int(form.gender.data)
-            profile['birthdate'] = form.birthdate.data
 
             #XXX should be done by the model
             Db().get('profile').update({'uid': user.uid}, {
@@ -100,12 +98,6 @@ class Account(router.Root):
                     }
                 ).start()
 
-            bday = ''
-            if profile['birthdate']:
-                bday = "%s/%s" % (
-                    profile['birthdate'].month,
-                    profile['birthdate'].day
-                )
 
             #register user in mailchimp internal user list
             AsyncUserRegister(
@@ -119,11 +111,9 @@ class Account(router.Root):
                     'USERNAME': user.username,
                     'FNAME': user.firstname,
                     'LNAME': user.lastname,
-                    'GENDER': 'Male' if profile['gender'] == 1 else 'Female',
                     'STATUS': 'Pending activation',
                     'ACTCODE': user.activation_code,
                     'CREATIONDT': "%s" % datetime.datetime.utcnow(),
-                    'BIRTHDAY': bday,
                     'SOURCE': 'Classic'
                 }
             ).start()
@@ -267,9 +257,3 @@ class AccountCreateValidation(Form):
         validators.Email()
     ])
     password = TextField('password', [validators.Length(min=6, max=25)])
-    gender = TextField('gender', [validators.Length(min=1, max=2)])
-    birthdate = DateTimeField(
-        'birthdate',
-        [validators.required()],
-        format='%Y-%m-%d'
-    )
