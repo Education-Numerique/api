@@ -69,10 +69,8 @@ class BasicTest(unittest.TestCase):
             api.setCredentials('anonymous', '860b9dbbda6ee5f71ddf3b44e54c469e')
             resp = api.users.create(
                 username="toto42",
-                gender=1,
                 password="toto42",
-                email="void@webitup.fr",
-                birthdate="1986-01-01"
+                email="void@webitup.fr"
             )
         except exceptions.HTTPRequestException as e:
             raise Exception(e.response.json)
