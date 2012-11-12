@@ -233,8 +233,6 @@ class Auth(object):
         origin = False
         xgate = False
 
-        print('****** whitelist', whitelist)
-
         if 'origin' in self.__req.headers:
             origin = self.__req.headers['origin'].lower()
             origin = origin.replace('http://', '')
@@ -251,7 +249,6 @@ class Auth(object):
             if ':' in xgate:
                 xgate = xgate.split(':').pop(0)
 
-        print('****** hosts', origin, xgate)
         if origin:
 
             if origin == app.Controller().getHost():
