@@ -7,7 +7,7 @@ from lxxl.lib.storage import Db
 from gridfs import NoFile
 from gridfs.errors import CorruptGridFile
 
-from PIL import Image, ImageOps
+import Image, ImageOps
 import io
 
 
