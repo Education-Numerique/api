@@ -43,7 +43,7 @@ class Buffalo(router.Root):
             resp = Buffalo.SESSION.request(req.method, '%s%s' % (
                 'http://localhost:8082',
                 req.path_qs
-            ), headers=sendHeaders, data=data)
+            ), headers=sendHeaders, data=data, prefetch=True)
 
             # except:
             #     output.error('Auth Backend fail', 503)
@@ -71,7 +71,7 @@ class Buffalo(router.Root):
                 resp = Buffalo.SESSION.request(req.method, '%s%s' % (
                     'http://localhost:8083',
                     req.path_qs
-                ), headers=sendHeaders, data=datas)
+                ), headers=sendHeaders, data=datas, prefetch=True)
             except:
                 output.error('Graph backend fail', 503)
 
