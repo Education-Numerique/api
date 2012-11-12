@@ -34,11 +34,16 @@ class Buffalo(router.Root):
 
                 sendHeaders[k] = v
 
+            if req.method.lower() == 'get':
+                data = None
+            else:
+                data = {}
+
             # try:
-            resp = Buffalo.SESSION.request('GET', '%s%s' % (
+            resp = Buffalo.SESSION.request(req.method, '%s%s' % (
                 'http://localhost:8082',
                 req.path_qs
-            ), headers=sendHeaders)
+            ), headers=sendHeaders, data=data)
 
             # except:
             #     output.error('Auth Backend fail', 503)
