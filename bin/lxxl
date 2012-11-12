@@ -22,4 +22,4 @@ if not command in ['start', 'stop', 'restart', 'status']:
 services = ['lxxl.wildbull', 'lxxl.graph', 'lxxl.authentication.front', 'lxxl.authentication.admin']
 
 for service in services:
-    subprocess.call("%s %s" % (service, command), shell=True)
+    subprocess.call("%s %s -v" % (service, command), shell=True)
