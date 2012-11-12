@@ -40,7 +40,7 @@ class Buffalo(router.Root):
                 data = {}
 
             # try:
-            resp = Buffalo.SESSION.request(req.method, '%s%s' % (
+            resp = requests.request(req.method, '%s%s' % (
                 'http://localhost:8082',
                 req.path_qs
             ), headers=sendHeaders, data=data, prefetch=True)
@@ -68,7 +68,7 @@ class Buffalo(router.Root):
                 datas[k] = v
 
             try:
-                resp = Buffalo.SESSION.request(req.method, '%s%s' % (
+                resp = requests.request(req.method, '%s%s' % (
                     'http://localhost:8083',
                     req.path_qs
                 ), headers=sendHeaders, data=datas, prefetch=True)
