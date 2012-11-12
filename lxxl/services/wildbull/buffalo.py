@@ -35,6 +35,10 @@ class Buffalo(router.Root):
                 sendHeaders[k] = v
 
             # try:
+            print(req.method, '%s%s' % (
+                'http://localhost:8082',
+                req.path_qs
+            ))
             resp = Buffalo.SESSION.request(req.method, '%s%s' % (
                 'http://localhost:8082',
                 req.path_qs
