@@ -18,8 +18,6 @@ cfg = Config(CONFIG_FILE)
 cfg.include(STORAGE_FILE)
 cfg.include(os.path.join(ROUTING_FILE, 'users.yml'))
 cfg.include(os.path.join(ROUTING_FILE, 'usergroups.yml'))
-cfg.include(os.path.join(ROUTING_FILE, 'revisions.yml'))
-cfg.include(os.path.join(ROUTING_FILE, 'categories.yml'))
 cfg.include(os.path.join(ROUTING_FILE, 'activities.yml'))
 
 cfg.include(COMMON_ROUTING_FILE)
