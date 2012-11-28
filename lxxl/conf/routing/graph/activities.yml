@@ -63,14 +63,3 @@ routing:
         module: Activities
         action: save
     method: post
-
-
-  - url: ^/:version/activities/:rid/revisions$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-    params:
-        service: graph
-        module: Activities
-        action: listRevisions
-    method: get

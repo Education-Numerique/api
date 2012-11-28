@@ -51,11 +51,3 @@ class Activities(router.Root):
             pass
 
         return Controller().getResponse(True)
-
-    def listRevisions(self, environ, params):
-        try:
-            output.success('woooohooooo', 200)
-        except Error:
-            pass
-
-        return Controller().getResponse(True)
