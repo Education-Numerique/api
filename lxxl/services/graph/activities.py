@@ -36,7 +36,7 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
-    def autosave(self, environ, params):
+    def publish(self, environ, params):
         try:
             output.success('woooohooooo', 200)
         except Error:
