@@ -22,7 +22,7 @@ class Activities(router.Root):
 
     def list(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            output.success('woooohooooo list', 200)
         except Error:
             pass
 
@@ -44,7 +44,31 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
+    def unpublish(self, environ, params):
+        try:
+            output.success('woooohooooo', 200)
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
     def save(self, environ, params):
+        try:
+            output.success('woooohooooo', 200)
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
+    def report(self, environ, params):
+        try:
+            output.success('woooohooooo', 200)
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
+    def seen(self, environ, params):
         try:
             output.success('woooohooooo', 200)
         except Error:

@@ -64,3 +64,33 @@ routing:
         action: publish
     method: post
 
+  - url: ^/:version/activities/:rid/unpublish$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Activities
+        action: unpublish
+    method: post
+
+  - url: ^/:version/activities/:rid/report$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Activities
+        action: report
+    method: post
+
+  - url: ^/:version/activities/:rid/seen$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph
+        module: Activities
+        action: seen
+    method: post
+
