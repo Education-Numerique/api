@@ -66,9 +66,9 @@ class Buffalo(router.Root):
                 if 'x-lxxl' in k.lower():
                     sendHeaders[k] = v
 
-            datas = {}
-            for (k, v) in req.POST.items():
-                datas[k] = v
+            datas = None
+            if req.body:
+                datas = req.body
 
             try:
                 resp = requests.request(req.method, '%s%s' % (

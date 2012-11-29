@@ -5,6 +5,7 @@ from lxxl.lib.config import Config
 class Activity:
 
     def __init__(self, **entries):
+        self.id = None
         self.publicationData = None
         self.creationDate = None
         self.isPublished = False
@@ -30,6 +31,12 @@ class Activity:
 
         self.__dict__.update(entries)
 
+    def toObject(self):
+        obj = self.__dict__.copy()
+        del obj['_id']
+        obj['id'] = str(obj['id'])
+        return obj
+
 
 class Factory:
 
@@ -41,4 +48,5 @@ class Factory:
         c = Db().get('activities')
 
         id = c.insert(activity.__dict__, True)
-        obj._id = id
+        activity.id = id
+        print('***** first', activity.id)

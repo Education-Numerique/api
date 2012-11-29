@@ -28,53 +28,53 @@ class Controller:
 
         def __call__(self, environ, start_response):
 
-            isJson = False
+            # isJson = False
 
-            if 'application/json' in environ.get('CONTENT_TYPE'):
-                environ['CONTENT_TYPE'] = environ['CONTENT_TYPE'].replace(
-                    'application/json', 'application/x-www-form-urlencoded')
-                isJson = True
+            # if 'application/json' in environ.get('CONTENT_TYPE'):
+            #     environ['CONTENT_TYPE'] = environ['CONTENT_TYPE'].replace(
+            #         'application/json', 'application/x-www-form-urlencoded')
+            #     isJson = True
 
-            for (key, value) in environ.items():
-                if not key.startswith('HTTP_'):
-                    continue
+            # for (key, value) in environ.items():
+            #     if not key.startswith('HTTP_'):
+            #         continue
 
-                environ[key] = value.encode('latin1').decode()
+            #     environ[key] = value.encode('latin1').decode()
 
             self._req = Request(environ)
 
-            if self._req.method == 'POST' and isJson:
-                self._req.charset = 'utf8'
+            # if self._req.method == 'POST' and isJson:
+            #     self._req.charset = 'utf8'
 
-                try:
-                    self._json = loads(self._req.body.decode(
-                        'utf-8'), encoding=self._req.charset)
-                except Exception as e:
-                    self._json = None
+            #     try:
+            #         self._json = loads(self._req.body.decode(
+            #             'utf-8'), encoding=self._req.charset)
+            #     except Exception as e:
+            #         self._json = None
 
-                if self._json is not None and isinstance(self._json, dict):
-                    post = []
-                    for key, value in self.getPostJson().items():
-                        #XXX danger
-                        # if not isinstance( value, int ):
-                        #     value = value.encode('utf-8')
+            #     if self._json is not None and isinstance(self._json, dict):
+            #         post = []
+            #         for key, value in self.getPostJson().items():
+            #             #XXX danger
+            #             # if not isinstance( value, int ):
+            #             #     value = value.encode('utf-8')
 
-                        post.append((key, value))
+            #             post.append((key, value))
 
-                    self._req.body = urllib.parse.urlencode(
-                        post).encode('utf-8')
+            #         self._req.body = urllib.parse.urlencode(
+            #             post).encode('utf-8')
 
-                elif self._json is not None and isinstance(self._json, list):
-                    post = []
-                    for value in self.getPostJson():
-                        #XXX danger
-                        # if not isinstance( value, int ):
-                        #     value = value.encode('utf-8')
+            #     elif self._json is not None and isinstance(self._json, list):
+            #         post = []
+            #         for value in self.getPostJson():
+            #             #XXX danger
+            #             # if not isinstance( value, int ):
+            #             #     value = value.encode('utf-8')
 
-                        post.append(value)
+            #             post.append(value)
 
-                    self._req.body = urllib.parse.urlencode(
-                        post).encode('utf-8')
+            #         self._req.body = urllib.parse.urlencode(
+            #             post).encode('utf-8')
 
             self._environ = environ
             return self._router.__call__(environ, start_response)
