@@ -49,4 +49,3 @@ class Factory:
 
         id = c.insert(activity.__dict__, True)
         activity.id = id
-        print('***** first', activity.id)
