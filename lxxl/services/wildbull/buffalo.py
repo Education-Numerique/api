@@ -51,6 +51,7 @@ class Buffalo(router.Root):
             except:
                 output.error('Auth Backend fail', 503)
 
+            print('***** debug', resp.status_code, int(resp.status_code / 100) )
             if int(resp.status_code / 100) != 2:
                 for (k, v) in resp.headers.items():
                     wildResponse.headers[k.lower()] = v
