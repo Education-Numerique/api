@@ -10,7 +10,7 @@ routing:
     vars:
         version: ([0-9]\.[0-9])
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: create
     method: post
@@ -19,7 +19,7 @@ routing:
     vars:
         version: ([0-9]\.[0-9])
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: list
     method: get
@@ -29,7 +29,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: fetch
     method: get
@@ -39,7 +39,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: delete
     method: delete
@@ -49,7 +49,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: save
     method: post
@@ -59,7 +59,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: publish
     method: post
@@ -69,7 +69,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: unpublish
     method: post
@@ -79,7 +79,7 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: report
     method: post
@@ -89,8 +89,134 @@ routing:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{25})
     params:
-        service: graph
+        service: graph.activities
         module: Activities
         action: seen
     method: post
 
+################################################################################
+#
+#   Thumbnail
+#
+################################################################################
+
+
+  - url: ^/:version/activities/:rid/thumbnail$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Thumbnail
+        action: save
+    method: post
+
+  - url: ^/:version/activities/:rid/thumbnail$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Thumbnail
+        action: delete
+    method: delete
+
+################################################################################
+#
+#   Media
+#
+################################################################################
+
+
+  - url: ^/:version/activities/:rid/media$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Media
+        action: create
+    method: post
+
+  - url: ^/:version/activities/:rid/media/:mid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        mid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Media
+        action: fetch
+    method: get
+
+  - url: ^/:version/activities/:rid/media/:mid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        mid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Media
+        action: update
+    method: post
+
+  - url: ^/:version/activities/:rid/media/:mid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        mid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Media
+        action: delete
+    method: delete
+
+################################################################################
+#
+#   Attachments
+#
+################################################################################
+
+
+  - url: ^/:version/activities/:rid/attachments$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Attachments
+        action: create
+    method: post
+
+  - url: ^/:version/activities/:rid/attachments/:aid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        aid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Attachments
+        action: fetch
+    method: get
+
+  - url: ^/:version/activities/:rid/attachments/:aid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        aid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Attachments
+        action: update
+    method: post
+
+  - url: ^/:version/activities/:rid/attachments/:aid$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{25})
+        aid: ([a-zA-Z0-9]{25})
+    params:
+        service: graph.activities
+        module: Attachments
+        action: delete
+    method: delete
