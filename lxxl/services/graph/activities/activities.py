@@ -10,7 +10,7 @@ class Activities(router.Root):
             req = Controller().getRequest()
             a = Activity(**req.json)
             Factory.new(a)
-            output.success(a.toObject(), 200)
+            output.success(a.toObject(), 201)
         except Error:
             pass
 
