@@ -8,7 +8,7 @@ from lxxl.lib.admin import AdminRequest, AdminError
 from lxxl.lib.flush import FlushRequest
 from lxxl.lib.mailer import AsyncMailer, AsyncUserRegister
 
-from lxxl.model.users import User, UserFactory, Duplicate
+from lxxl.model.users import User, Factory as UserFactory, Duplicate
 
 
 class Account(router.Root):
@@ -34,7 +34,7 @@ class Account(router.Root):
             user.generateActivationCode()
 
             try:
-                user = UserFactory().new(user)
+                user = UserFactory.new(user)
 
             except Duplicate as e:
                 output.error({'duplicate': e.value})
@@ -132,7 +132,7 @@ class Account(router.Root):
             if not 'email' in datas or not 'code' in datas:
                 output.error('invalidate code', 400)
 
-            user = UserFactory().get({'email': datas['email']})
+            user = UserFactory.get({'email': datas['email']})
 
             if user is None:
                 output.error('unknown user', 400)
@@ -218,7 +218,7 @@ class Account(router.Root):
             # if relation != 2 and relation != 1:
             #     output.error('#ApiKeyUnauthorized', 403)
 
-            friends, total = UserFactory().getAllUsers()
+            friends, total = UserFactory.getAllUsers()
 
             # for u in friends:
             #     try:

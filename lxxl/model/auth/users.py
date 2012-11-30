@@ -28,9 +28,10 @@ class User:
         return "%s:%s" % (self.uid, sha1(salt.encode('utf-8')).hexdigest())
 
 
-class UserFactory:
+class Factory:
 
-    def get(self, login):
+    @staticmethod
+    def get(login):
         login = login.lower()
         try:
             data = None
@@ -53,7 +54,7 @@ class UserFactory:
                 )
 
                 if login == 'anonymous':
-                    data = self.getAnonymous().__dict__
+                    data = Factory.getAnonymous().__dict__
                 else:
                     data = storage.Db().get('auth_users').find_one(
                         {"login": login}
@@ -70,7 +71,8 @@ class UserFactory:
 
         return User(**data)
 
-    def getAnonymous(self):
+    @staticmethod
+    def getAnonymous():
         user = User()
         user.login = 'anonymous'
         user.realm = Config().get('realm')
@@ -79,7 +81,8 @@ class UserFactory:
 
         return user
 
-    def new(self, obj):
+    @staticmethod
+    def new(obj):
         c = storage.Db().get('auth_users')
 
         id = c.insert(obj.__dict__)

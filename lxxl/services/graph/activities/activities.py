@@ -1,6 +1,7 @@
 from lxxl.lib import router, output
 from lxxl.lib.app import Error, Controller
 from lxxl.model.activities import Activity, Factory
+from lxxl.model.users import Factory as UserFactory
 
 
 class Activities(router.Root):
@@ -9,6 +10,7 @@ class Activities(router.Root):
         try:
             req = Controller().getRequest()
             a = Activity(**req.json)
+            a.setAuthor(UserFactory.get(Controller().getUid()))
             Factory.new(a)
             output.success(a.toObject(), 201)
         except Error:

@@ -93,7 +93,7 @@ class Auth(object):
             raise AuthError('User#auth invalid nonce', 401, 24)
 
         #fetch user
-        obj = users.UserFactory().get(digest_response.username)
+        obj = users.Factory.get(digest_response.username)
 
         if not obj:
             self.__setAuthenticate()
@@ -245,7 +245,7 @@ class Auth(object):
             xgate = self.__req.headers['x-gate-origin'].lower()
             xgate = xgate.replace('http://', '')
             xgate = xgate.replace('https://', '')
-            
+
             if ':' in xgate:
                 xgate = xgate.split(':').pop(0)
 

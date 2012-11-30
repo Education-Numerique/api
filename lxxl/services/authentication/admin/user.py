@@ -7,7 +7,7 @@ class User(router.Root):
 
     def findByLogin(self, environ, params):
         try:
-            user = users.UserFactory().get(params['login'])
+            user = users.Factory.get(params['login'])
 
             if not user:
                 output.error('unknown acess', 404)
@@ -40,7 +40,7 @@ class User(router.Root):
             user.activate = 0
             user.setDigest(password)
 
-            users.UserFactory().new(user)
+            users.Factory.new(user)
 
             output.success('user created', 201)
         except app.Error:
@@ -59,7 +59,7 @@ class User(router.Root):
                 output.error('invalid format', 400)
 
             login = login.lower()
-            user = users.UserFactory().get(login)
+            user = users.Factory.get(login)
 
             if (not user) or (user.uid != uid):
                 output.error('unknown acess', 404)
@@ -87,7 +87,7 @@ class User(router.Root):
                 output.error('invalid format', 400)
 
             login = login.lower()
-            user = users.UserFactory().get(login)
+            user = users.Factory.get(login)
 
             if (not user) or (user.uid != uid):
                 output.error('unknown access', 404)
@@ -117,7 +117,7 @@ class User(router.Root):
                 output.error('invalid format', 400)
 
             login = login.lower()
-            user = users.UserFactory().get(login)
+            user = users.Factory.get(login)
 
             if (not user) or (user.uid != uid):
                 output.error('unknown acess', 404)

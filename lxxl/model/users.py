@@ -81,9 +81,10 @@ class User:
         self.uid = md5(str(id).encode('utf-8')).hexdigest()
 
 
-class UserFactory:
+class Factory:
 
-    def get(self, search):
+    @staticmethod
+    def get(search):
         try:
             if isinstance(search, str):
                 search = {'uid': search}
@@ -105,7 +106,8 @@ class UserFactory:
 
         return User(**data)
 
-    def getAllUsers(self):
+    @staticmethod
+    def getAllUsers():
         data = Db().get('users').find({'activate': 1, 'seq': {
                                        '$gt': 0}}, {'friends': {'$slice': 0}})
         result = []
@@ -115,7 +117,8 @@ class UserFactory:
         total = data.count()
         return (result, total)
 
-    def new(self, obj):
+    @staticmethod
+    def new(obj):
         #Db().get('users').ensure_index([('username', storage.DESCENDING)], { 'unique' : True, 'background' : False, 'dropDups' : True })
         Db().get('users').ensure_index([('uid', DESCENDING)
                                         ], {'unique': True, 'background': False, 'dropDups': True})

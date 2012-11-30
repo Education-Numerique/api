@@ -3,7 +3,7 @@ from lxxl.lib.app import Controller, Error
 from lxxl.lib.storage import Db
 from lxxl.lib.flush import FlushRequest
 
-from lxxl.model.users import User, UserFactory, Duplicate
+from lxxl.model.users import User, Factory as UserFactory, Duplicate
 
 import datetime
 
@@ -20,7 +20,7 @@ class Profile(router.Root):
             # if relation < 1:
             #     output.error('#ApiKeyUnauthorized', 403)
 
-            user = UserFactory().get(params['uid'])
+            user = UserFactory.get(params['uid'])
 
             if not user:
                 output.error('unknown user', 404)
@@ -78,7 +78,7 @@ class Profile(router.Root):
                 output.error(
                     '#ApiKeyUnauthorized : none of your business', 403)
 
-            user = UserFactory().get(params['uid'])
+            user = UserFactory.get(params['uid'])
 
             if not user:
                 output.error('unknown user', 404)
