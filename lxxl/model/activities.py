@@ -1,5 +1,6 @@
 from lxxl.lib.storage import Db, DbError, ObjectId, DESCENDING, ASCENDING
 from lxxl.lib.config import Config
+import time
 
 
 class Activity:
@@ -29,16 +30,20 @@ class Activity:
         self.publishedPages = []
         self.draftedPages = []
 
-        entries = entries.copy()
-        if '_id' in entries:
-            self.id = entries['_id']
-            del entries['_id']
+        self.deleted = False
+        self.reported = False
 
-        if 'pages' in entries:
-            self.draftedPages = entries['pages']
-            del entries['pages']
+        self.merge(**entries)
 
-        self.__dict__.update(entries)
+    def publish(self, publish=True):
+        if publish:
+            self.isPublished = True
+            self.publicationDate = int(time.time())
+            self.publishedPages = self.draftedPages
+        else:
+            self.isPublished = False
+            self.publicationDate = None
+            self.publishedPages = []
 
     def setAuthor(self, user):
         self.author = {}
@@ -53,6 +58,18 @@ class Activity:
 
         obj['id'] = str(obj['id'])
         return obj
+
+    def merge(self, **entries):
+        entries = entries.copy()
+        if '_id' in entries:
+            self.id = entries['_id']
+            del entries['_id']
+
+        if 'pages' in entries:
+            self.draftedPages = entries['pages']
+            del entries['pages']
+
+        self.__dict__.update(entries)
 
     def toDatabase(self):
         obj = self.__dict__.copy()
@@ -76,11 +93,38 @@ class Factory:
     def new(activity):
         if not isinstance(activity, Activity):
             raise Exception('invalid activity object', activity)
+        try:
+            c = Db().get('activities')
 
-        c = Db().get('activities')
+            id = c.insert(activity.toDatabase(), True)
+            activity.id = id
+        except DbError:
+            output.error('cannot access db', 503)
 
-        id = c.insert(activity.toDatabase(), True)
-        activity.id = id
+    @staticmethod
+    def delete(activity):
+        if not isinstance(activity, Activity):
+            raise Exception('invalid activity object', activity)
+        try:
+            c = Db().get('activities')
+            activity.deleted = True
+            Factory.update(activity)
+        except DbError:
+            output.error('cannot access db', 503)
+
+    @staticmethod
+    def update(activity):
+        if not isinstance(activity, Activity):
+            raise Exception('invalid activity object', activity)
+        try:
+            c = Db().get('activities')
+            c.update(
+                {'_id': ObjectId(activity.id)},
+                activity.toDatabase(),
+                True
+            )
+        except DbError:
+            output.error('cannot access db', 503)
 
     @staticmethod
     def get(search):
@@ -94,6 +138,7 @@ class Factory:
                 search = tmp
                 del tmp
 
+            search['deleted'] = False
             data = Db().get('activities').find_one(search)
 
         except DbError:

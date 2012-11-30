@@ -42,7 +42,12 @@ class Activities(router.Root):
 
     def delete(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            ActivityFactory.delete(a)
+            output.success('Activity deleted', 200)
         except Error:
             pass
 
@@ -50,7 +55,13 @@ class Activities(router.Root):
 
     def publish(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            req = Controller().getRequest()
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            a.publish()
+            output.success(a.toObject(), 200)
         except Error:
             pass
 
@@ -66,7 +77,26 @@ class Activities(router.Root):
 
     def save(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            req = Controller().getRequest()
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            whitelist = ['title', 'description', 'level', 'matter',
+                         'duration', 'difficulty', 'category', 'pages']
+
+            new = {}
+
+            for (k, v) in req.json:
+                if not k in whitelist:
+                    continue
+                new[k] = v
+
+            a.merge(new)
+
+            ActivityFactory.update(a)
+            output.success(a.toObject(), 200)
+
         except Error:
             pass
 
