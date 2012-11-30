@@ -6,7 +6,7 @@ routing:
 ################################################################################
 
 
-  - url: ^/:version/activities/$
+  - url: ^/:version/activities(/)?$
     vars:
         version: ([0-9]\.[0-9])
     params:
@@ -15,7 +15,7 @@ routing:
         action: create
     method: post
 
-  - url: ^/:version/activities/$
+  - url: ^/:version/activities(/)?$
     vars:
         version: ([0-9]\.[0-9])
     params:
@@ -24,20 +24,20 @@ routing:
         action: list
     method: get
 
-  - url: ^/:version/activities/:rid$
+  - url: ^/:version/activities/:rid(/)?$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
         action: fetch
     method: get
 
-  - url: ^/:version/activities/:rid$
+  - url: ^/:version/activities/:rid(/)?$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -47,7 +47,7 @@ routing:
   - url: ^/:version/activities/:rid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -57,7 +57,7 @@ routing:
   - url: ^/:version/activities/:rid/publish$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -67,7 +67,7 @@ routing:
   - url: ^/:version/activities/:rid/unpublish$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -77,7 +77,7 @@ routing:
   - url: ^/:version/activities/:rid/report$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -87,7 +87,7 @@ routing:
   - url: ^/:version/activities/:rid/seen$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Activities
@@ -104,7 +104,7 @@ routing:
   - url: ^/:version/activities/:rid/thumbnail$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Thumbnail
@@ -114,7 +114,7 @@ routing:
   - url: ^/:version/activities/:rid/thumbnail$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Thumbnail
@@ -131,7 +131,7 @@ routing:
   - url: ^/:version/activities/:rid/media$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Media
@@ -141,8 +141,8 @@ routing:
   - url: ^/:version/activities/:rid/media/:mid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        mid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        mid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Media
@@ -152,8 +152,8 @@ routing:
   - url: ^/:version/activities/:rid/media/:mid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        mid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        mid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Media
@@ -163,8 +163,8 @@ routing:
   - url: ^/:version/activities/:rid/media/:mid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        mid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        mid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Media
@@ -181,7 +181,7 @@ routing:
   - url: ^/:version/activities/:rid/attachments$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Attachments
@@ -191,8 +191,8 @@ routing:
   - url: ^/:version/activities/:rid/attachments/:aid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        aid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        aid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Attachments
@@ -202,8 +202,8 @@ routing:
   - url: ^/:version/activities/:rid/attachments/:aid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        aid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        aid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Attachments
@@ -213,8 +213,8 @@ routing:
   - url: ^/:version/activities/:rid/attachments/:aid$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{25})
-        aid: ([a-zA-Z0-9]{25})
+        rid: ([a-zA-Z0-9]{24})
+        aid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Attachments

@@ -1,7 +1,8 @@
 from lxxl.lib import router, output
 from lxxl.lib.app import Error, Controller
-from lxxl.model.activities import Activity, Factory
+from lxxl.model.activities import Activity, Factory as ActivityFactory
 from lxxl.model.users import Factory as UserFactory
+import time
 
 
 class Activities(router.Root):
@@ -11,7 +12,8 @@ class Activities(router.Root):
             req = Controller().getRequest()
             a = Activity(**req.json)
             a.setAuthor(UserFactory.get(Controller().getUid()))
-            Factory.new(a)
+            a.creationDate = int(time.time())
+            ActivityFactory.new(a)
             output.success(a.toObject(), 201)
         except Error:
             pass
@@ -20,7 +22,11 @@ class Activities(router.Root):
 
     def fetch(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            req = Controller().getRequest()
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+            output.success(a.toObject(), 200)
         except Error:
             pass
 

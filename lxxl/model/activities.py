@@ -1,4 +1,4 @@
-from lxxl.lib.storage import Db, DbError, DESCENDING, ASCENDING
+from lxxl.lib.storage import Db, DbError, ObjectId, DESCENDING, ASCENDING
 from lxxl.lib.config import Config
 
 
@@ -6,7 +6,7 @@ class Activity:
 
     def __init__(self, **entries):
         self.id = None
-        self.publicationData = None
+        self.publicationDate = None
         self.creationDate = None
         self.isPublished = False
 
@@ -30,6 +30,10 @@ class Activity:
         self.draftedPages = []
 
         entries = entries.copy()
+        if '_id' in entries:
+            self.id = entries['_id']
+            del entries['_id']
+
         if 'pages' in entries:
             self.draftedPages = entries['pages']
             del entries['pages']
@@ -38,7 +42,7 @@ class Activity:
 
     def setAuthor(self, user):
         self.author = {}
-        self.author['id'] = user.uid
+        self.author['uid'] = user.uid
         self.author['username'] = user.username
 
     def toObject(self):
@@ -77,3 +81,25 @@ class Factory:
 
         id = c.insert(activity.toDatabase(), True)
         activity.id = id
+
+    @staticmethod
+    def get(search):
+        try:
+            if isinstance(search, str):
+                search = {'_id': ObjectId(search)}
+            else:
+                tmp = {}
+                for (key, value) in search.items():
+                    tmp[key] = value.lower()
+                search = tmp
+                del tmp
+
+            data = Db().get('activities').find_one(search)
+
+        except DbError:
+            output.error('cannot access db', 503)
+
+        if data is None:
+                return None
+
+        return Activity(**data)
