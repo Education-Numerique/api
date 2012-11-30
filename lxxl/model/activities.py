@@ -10,40 +10,55 @@ class Activity:
         self.publicationDate = None
         self.creationDate = None
         self.isPublished = False
-
-        self.hasThumbnail = False
-        self.seenCount = 0
-        self.attachmentsCount = 0
-
         self.author = None
-        self.contributors = []
-        self.extraContributors = []
+        self.isDeleted = False
+        self.isReported = False
 
-        self.title = None
-        self.description = None
-        self.level = None
-        self.matter = None
-        self.duration = None
-        self.difficulty = None
-        self.category = []
+        self.seenCount = 0
 
-        self.publishedPages = []
-        self.draftedPages = []
+        self.draft = {}
+        self.draft['contributors'] = []
+        self.draft['extraContributors'] = []
+        self.draft['attachmentsCount'] = 0
+        self.draft['hasThumbnail'] = False
+        self.draft['title'] = None
+        self.draft['description'] = None
+        self.draft['level'] = None
+        self.draft['matter'] = None
+        self.draft['duration'] = None
+        self.draft['difficulty'] = None
+        self.draft['category'] = []
+        self.draft['pages'] = []
 
-        self.deleted = False
-        self.reported = False
+        self.published = {}
+        self.published['contributors'] = []
+        self.published['extraContributors'] = []
+        self.published['attachmentsCount'] = 0
+        self.published['hasThumbnail'] = False
+        self.published['title'] = None
+        self.published['description'] = None
+        self.published['level'] = None
+        self.published['matter'] = None
+        self.published['duration'] = None
+        self.published['difficulty'] = None
+        self.published['category'] = []
+        self.published['pages'] = []
 
-        self.merge(**entries)
+        entries = entries.copy()
+        if '_id' in entries:
+            self.id = entries['_id']
+            del entries['_id']
+        self.__dict__.update(entries)
 
     def publish(self, publish=True):
         if publish:
             self.isPublished = True
             self.publicationDate = int(time.time())
-            self.publishedPages = self.draftedPages
+            self.published = self.draft
         else:
             self.isPublished = False
             self.publicationDate = None
-            self.publishedPages = []
+            self.published = {}
 
     def setAuthor(self, user):
         self.author = {}
@@ -59,17 +74,15 @@ class Activity:
         obj['id'] = str(obj['id'])
         return obj
 
-    def merge(self, **entries):
+    def saveDraft(self, **entries):
         entries = entries.copy()
-        if '_id' in entries:
-            self.id = entries['_id']
-            del entries['_id']
+        draftList = ['title', 'description', 'level', 'matter',
+                     'duration', 'difficulty', 'category', 'pages']
 
-        if 'pages' in entries:
-            self.draftedPages = entries['pages']
-            del entries['pages']
-
-        self.__dict__.update(entries)
+        for (k, v) in entries.items():
+            if not k in draftList:
+                continue
+            self.draft[k] = v
 
     def toDatabase(self):
         obj = self.__dict__.copy()
@@ -95,8 +108,10 @@ class Factory:
             raise Exception('invalid activity object', activity)
         try:
             c = Db().get('activities')
-
-            id = c.insert(activity.toDatabase(), True)
+            tmp = activity.toDatabase()
+            if '_id' in tmp:
+                del tmp['_id']
+            id = c.insert(tmp, True)
             activity.id = id
         except DbError:
             output.error('cannot access db', 503)
@@ -107,7 +122,7 @@ class Factory:
             raise Exception('invalid activity object', activity)
         try:
             c = Db().get('activities')
-            activity.deleted = True
+            activity.isDeleted = True
             Factory.update(activity)
         except DbError:
             output.error('cannot access db', 503)
@@ -127,6 +142,21 @@ class Factory:
             output.error('cannot access db', 503)
 
     @staticmethod
+    def incSeen(activity):
+        if not isinstance(activity, Activity):
+            raise Exception('invalid activity object', activity)
+        try:
+            c = Db().get('activities')
+            c.update(
+                {'_id': ObjectId(activity.id)},
+                {'$inc': {'seenCount': 1}},
+                True
+            )
+            activity.seenCount += 1
+        except DbError:
+            output.error('cannot access db', 503)
+
+    @staticmethod
     def get(search):
         try:
             if isinstance(search, str):
@@ -138,7 +168,7 @@ class Factory:
                 search = tmp
                 del tmp
 
-            search['deleted'] = False
+            search['isDeleted'] = False
             data = Db().get('activities').find_one(search)
 
         except DbError:

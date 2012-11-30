@@ -10,7 +10,8 @@ class Activities(router.Root):
     def create(self, environ, params):
         try:
             req = Controller().getRequest()
-            a = Activity(**req.json)
+            a = Activity()
+            a.saveDraft(**req.json)
             a.setAuthor(UserFactory.get(Controller().getUid()))
             a.creationDate = int(time.time())
             ActivityFactory.new(a)
@@ -61,6 +62,7 @@ class Activities(router.Root):
                 output.error('not found', 404)
 
             a.publish()
+            ActivityFactory.update(a)
             output.success(a.toObject(), 200)
         except Error:
             pass
@@ -69,7 +71,14 @@ class Activities(router.Root):
 
     def unpublish(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            req = Controller().getRequest()
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            a.publish(False)
+            ActivityFactory.update(a)
+            output.success(a.toObject(), 200)
         except Error:
             pass
 
@@ -82,17 +91,7 @@ class Activities(router.Root):
             if not a:
                 output.error('not found', 404)
 
-            whitelist = ['title', 'description', 'level', 'matter',
-                         'duration', 'difficulty', 'category', 'pages']
-
-            new = {}
-
-            for (k, v) in req.json:
-                if not k in whitelist:
-                    continue
-                new[k] = v
-
-            a.merge(new)
+            a.saveDraft(**req.json)
 
             ActivityFactory.update(a)
             output.success(a.toObject(), 200)
@@ -104,7 +103,13 @@ class Activities(router.Root):
 
     def report(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            a.isReported = True
+            ActivityFactory.update(a)
+            output.success(a.toObject(), 200)
         except Error:
             pass
 
@@ -112,7 +117,12 @@ class Activities(router.Root):
 
     def seen(self, environ, params):
         try:
-            output.success('woooohooooo', 200)
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            ActivityFactory.incSeen(a)
+            output.success(a.toObject(), 200)
         except Error:
             pass
 
