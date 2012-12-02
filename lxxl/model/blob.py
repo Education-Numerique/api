@@ -10,7 +10,6 @@ class Factory:
 
     @staticmethod
     def insert(blobType, release, data, content_type, **args):
-        print('insert blobid')
         try:
             blobId = ObjectId()
             dbGrid = Db().getGridFs('blobs')

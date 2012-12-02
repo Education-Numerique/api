@@ -16,7 +16,6 @@ class Media(router.Root):
                 output.error('activity not found', 404)
 
             cT = req.headers['Content-Type'] or 'application/octet-stream'
-            cT = 'image/jpeg'
             blobId = BlobFactory.getBlobIds(
                 activity=params['rid'],
                 release="draft",
