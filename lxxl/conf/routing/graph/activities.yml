@@ -6,7 +6,7 @@ routing:
 ################################################################################
 
 
-  - url: ^/:version/activities(/)?$
+  - url: ^/:version/activities$
     vars:
         version: ([0-9]\.[0-9])
     params:
@@ -15,7 +15,7 @@ routing:
         action: create
     method: post
 
-  - url: ^/:version/activities(/)?$
+  - url: ^/:version/activities$
     vars:
         version: ([0-9]\.[0-9])
     params:
@@ -24,7 +24,7 @@ routing:
         action: list
     method: get
 
-  - url: ^/:version/activities/:rid(/)?$
+  - url: ^/:version/activities/:rid$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -34,7 +34,7 @@ routing:
         action: fetch
     method: get
 
-  - url: ^/:version/activities/:rid(/)?$
+  - url: ^/:version/activities/:rid$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -44,7 +44,7 @@ routing:
         action: delete
     method: delete
 
-  - url: ^/:version/activities/:rid(/)?$
+  - url: ^/:version/activities/:rid$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -54,7 +54,7 @@ routing:
         action: save
     method: post
 
-  - url: ^/:version/activities/:rid/publish(/)?$
+  - url: ^/:version/activities/:rid/publish$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -64,7 +64,7 @@ routing:
         action: publish
     method: post
 
-  - url: ^/:version/activities/:rid/unpublish(/)?$
+  - url: ^/:version/activities/:rid/unpublish$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -74,7 +74,7 @@ routing:
         action: unpublish
     method: post
 
-  - url: ^/:version/activities/:rid/report(/)?$
+  - url: ^/:version/activities/:rid/report$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -84,7 +84,7 @@ routing:
         action: report
     method: post
 
-  - url: ^/:version/activities/:rid/seen(/)?$
+  - url: ^/:version/activities/:rid/seen$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
@@ -111,15 +111,6 @@ routing:
         action: save
     method: post
 
-  - url: ^/:version/activities/:rid/thumbnail$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Thumbnail
-        action: delete
-    method: delete
 
 ################################################################################
 #
@@ -138,38 +129,6 @@ routing:
         action: create
     method: post
 
-  - url: ^/:version/activities/:rid/media/:mid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        mid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Media
-        action: fetch
-    method: get
-
-  - url: ^/:version/activities/:rid/media/:mid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        mid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Media
-        action: update
-    method: post
-
-  - url: ^/:version/activities/:rid/media/:mid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        mid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Media
-        action: delete
-    method: delete
 
 ################################################################################
 #
@@ -188,35 +147,3 @@ routing:
         action: create
     method: post
 
-  - url: ^/:version/activities/:rid/attachments/:aid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        aid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Attachments
-        action: fetch
-    method: get
-
-  - url: ^/:version/activities/:rid/attachments/:aid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        aid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Attachments
-        action: update
-    method: post
-
-  - url: ^/:version/activities/:rid/attachments/:aid$
-    vars:
-        version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
-        aid: ([a-zA-Z0-9]{24})
-    params:
-        service: graph.activities
-        module: Attachments
-        action: delete
-    method: delete

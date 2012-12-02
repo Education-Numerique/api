@@ -59,8 +59,11 @@ class Router(object):
 
     def __init__(self):
         self._routes = {'default': []}
-        self._compile = lambda value: [(re.compile(i), j, k, l)
-                                       for i, j, k, l in unpack(value)]
+        self._compile = lambda value: [
+            (re.compile(i.replace('$', '(/)?$')
+                if i.endswith('$') else "%s(/)?"%i), j, k, l)
+            for i, j, k, l in unpack(value)
+        ]
 
     def __setitem__(self, key, value):
         if key == '*':
@@ -74,7 +77,7 @@ class Router(object):
         self._routes[vhost].append(self._compile(value))
 
     def matchRoutes(self, namespace, replace, host='default'):
-        infos = namespace.split('.')
+        infos = namespace.rsplit('.', 2)
         #pad array
         infos = infos + ['*'] * (3 - len(infos))
 
@@ -102,7 +105,7 @@ class Router(object):
         return urls
 
     def getRoute(self, namespace, replace, host='default'):
-        infos = namespace.split('.')
+        infos = namespace.rsplit('.', 2)
 
         for route in self._routes[host]:
             (m, obj, vars, params) = route

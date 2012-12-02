@@ -4,4 +4,4 @@ routing:
         service: wildbull
         module: Buffalo
         action: zebuit
-    method: [get, post, delete]
+    method: [get, post, delete, options]

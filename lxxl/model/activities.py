@@ -19,8 +19,7 @@ class Activity:
         self.draft = {}
         self.draft['contributors'] = []
         self.draft['extraContributors'] = []
-        self.draft['attachmentsCount'] = 0
-        self.draft['hasThumbnail'] = False
+        self.draft['blobs'] = {}
         self.draft['title'] = None
         self.draft['description'] = None
         self.draft['level'] = None
@@ -33,8 +32,7 @@ class Activity:
         self.published = {}
         self.published['contributors'] = []
         self.published['extraContributors'] = []
-        self.published['attachmentsCount'] = 0
-        self.published['hasThumbnail'] = False
+        self.published['blobs'] = {}
         self.published['title'] = None
         self.published['description'] = None
         self.published['level'] = None

@@ -11,27 +11,3 @@ class Media(router.Root):
             pass
 
         return Controller().getResponse(True)
-
-    def fetch(self, environ, params):
-        try:
-            output.success('woooohooooo', 200)
-        except Error:
-            pass
-
-        return Controller().getResponse(True)
-
-    def update(self, environ, params):
-        try:
-            output.success('woooohooooo', 200)
-        except Error:
-            pass
-
-        return Controller().getResponse(True)
-
-    def delete(self, environ, params):
-        try:
-            output.success('woooohooooo', 200)
-        except Error:
-            pass
-
-        return Controller().getResponse(True)

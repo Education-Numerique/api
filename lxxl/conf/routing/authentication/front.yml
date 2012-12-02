@@ -8,6 +8,16 @@ routing:
         service : authentication.front
         module : Void
         action: check
+    method: get
+
+  - url:    ^/:version/activities/:rid/thumbnail$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{24})
+    params: 
+        service : authentication.front
+        module : Void
+        action: check
     method: get 
 
   - url:    ^/:version/users/$

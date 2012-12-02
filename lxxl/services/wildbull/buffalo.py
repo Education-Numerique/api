@@ -15,6 +15,8 @@ import requests
    set resp.http.Access-Control-Expose-Headers = resp.http.Access-Control-Expose-Headers + ", D-vcl";
 
 """
+import Image, ImageOps
+import io
 
 class Buffalo(router.Root):
     SESSION = requests.session()
@@ -81,7 +83,10 @@ class Buffalo(router.Root):
             for (k, v) in resp.headers.items():
                 wildResponse.headers[k] = v
 
-            output.success(resp.json, resp.status_code)
+            wildResponse = Controller().getResponse()
+            wildResponse.body = resp.content
+            wildResponse.status = resp.status_code
+
         except Error:
             pass
 

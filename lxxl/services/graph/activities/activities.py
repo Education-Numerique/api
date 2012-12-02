@@ -10,6 +10,10 @@ class Activities(router.Root):
     def create(self, environ, params):
         try:
             req = Controller().getRequest()
+
+            if not req.json:
+                output.error('invalid json', 400)
+
             a = Activity()
             a.saveDraft(**req.json)
             a.setAuthor(UserFactory.get(Controller().getUid()))
@@ -87,6 +91,10 @@ class Activities(router.Root):
     def save(self, environ, params):
         try:
             req = Controller().getRequest()
+
+            if not req.json:
+                output.error('invalid json', 400)
+
             a = ActivityFactory.get(params['rid'])
             if not a:
                 output.error('not found', 404)
