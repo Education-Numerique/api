@@ -10,10 +10,11 @@ routing:
         action: check
     method: get
 
-  - url:    ^/:version/activities/:rid/thumbnail$
+  - url:    ^/:version/blob/:bid/:release$
     vars:
         version: ([0-9]\.[0-9])
-        rid: ([a-zA-Z0-9]{24})
+        bid: ([a-zA-Z0-9]{24})
+        release: (draft|published)
     params: 
         service : authentication.front
         module : Void

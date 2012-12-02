@@ -16,20 +16,41 @@ class Thumbnail(router.Root):
                 output.error('activity not found', 404)
 
             cT = req.headers['Content-Type'] or 'application/octet-stream'
-            blobId = BlobFactory.getBlobIds(activity=params['rid'],release="draft",type="thumbnail")
-            print(blobId, len(blobId))
+            cT = 'image/jpeg'
+            blobId = BlobFactory.getBlobIds(
+                activity=params['rid'],
+                release="draft",
+                type="thumbnail"
+            )
+
             if not len(blobId):
-                blobId = BlobFactory.insert('thumbnail', 'draft', req.body, cT, activity=params['rid'])
+                blobId = BlobFactory.insert(
+                    'thumbnail',
+                    'draft',
+                    req.body,
+                    cT,
+                    activity=params['rid']
+                )
             else:
                 blobId = blobId[0]
-                BlobFactory.update(blobId, 'thumbnail', 'draft', req.body, cT, activity=params['rid'])
+                BlobFactory.update(
+                    blobId,
+                    'thumbnail',
+                    'draft',
+                    req.body,
+                    cT,
+                    activity=params['rid']
+                )
 
             resultUrl = router.getRoute('graph.Blob.fetch', {
                 'version': params['version'],
-                'bid': blobId,
+                'bid': str(blobId),
                 'release': 'draft'
             })
-            output.success(resultUrl, 201)
+            output.success({
+                'url': resultUrl,
+                'blobId': str(blobId)
+            }, 201)
         except Error:
             pass
 
@@ -82,7 +103,6 @@ class Thumbnail(router.Root):
             resp.headers['Content-Type'] = thumbnail.content_type
             resp.body = thumbnail.read()
 
-            print(Controller().getRouter().getRoute('graph.activities.Media.create', params))
         except Error:
             pass
 

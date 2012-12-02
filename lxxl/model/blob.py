@@ -136,18 +136,30 @@ class Factory:
             output.error('cannot access db', 503)
 
     @staticmethod
-    def delete(blobId):
+    def delete(blobId, release='draft'):
         try:
             try:
                 dbGrid = Db().getGridFs('blobs')
-                thumbnail = dbGrid.get_last_version("%s.draft" % blobId)
+                filename = "%s.%s" % (blobId, release)
+                thumbnail = dbGrid.get_last_version(filename)
                 dbGrid.delete(thumbnail._id)
-                thumbnail = dbGrid.get_last_version("%s.published" % blobId)
-                dbGrid.delete(thumbnail._id)
+                thumbnail = thumbnail.__dict__['_file']
+            except CorruptGridFile as e:
+                pass
             except NoFile:
                 pass
-            except CorruptGridFile:
-                pass
+            finally:
+                if not 'activity' in thumbnail:
+                    return True
+
+                a = ActivityFactory.get(thumbnail['activity'])
+                if not 'blobs' in a.draft:
+                    return True
+                if not thumbnail['type'] in a.draft['blobs']:
+                    return True
+
+                a.draft['blobs'][thumbnail['type']].remove(str(blobId))
+                ActivityFactory.update(a)
         except DbError:
             output.error('cannot access db', 503)
 
