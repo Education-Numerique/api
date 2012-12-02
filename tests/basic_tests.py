@@ -73,7 +73,8 @@ class BasicTest(unittest.TestCase):
                 email="void@webitup.fr"
             )
         except exceptions.HTTPRequestException as e:
-            raise Exception(e.response.json)
+            if not 'duplicate' in e.response.json['error']:
+                raise Exception(e.response.json)
 
         activation = resp['message']
 
@@ -89,8 +90,7 @@ class BasicTest(unittest.TestCase):
             api.setCredentials('void@webitup.fr', 'toto42')
             resp = api.users.authenticate(forcepost=True)
         except exceptions.HTTPRequestException as e:
-            if not 'duplicate' in e.response.json['error']:
-                raise Exception(e.response.json)
+            raise Exception(e.response.json)
 
 
 if __name__ == '__main__':
