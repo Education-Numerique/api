@@ -126,7 +126,7 @@ routing:
     params:
         service: graph.activities
         module: Media
-        action: create
+        action: save
     method: post
 
 
@@ -137,13 +137,13 @@ routing:
 ################################################################################
 
 
-  - url: ^/:version/activities/:rid/attachments$
+  - url: ^/:version/activities/:rid/attachment$
     vars:
         version: ([0-9]\.[0-9])
         rid: ([a-zA-Z0-9]{24})
     params:
         service: graph.activities
         module: Attachments
-        action: create
+        action: save
     method: post
 
