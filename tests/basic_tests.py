@@ -89,7 +89,8 @@ class BasicTest(unittest.TestCase):
             api.setCredentials('void@webitup.fr', 'toto42')
             resp = api.users.authenticate(forcepost=True)
         except exceptions.HTTPRequestException as e:
-            raise Exception(e.response.json)
+            if not 'duplicate' in e.response.json['error']:
+                raise Exception(e.response.json)
 
 
 if __name__ == '__main__':
