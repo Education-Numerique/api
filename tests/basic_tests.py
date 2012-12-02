@@ -75,6 +75,8 @@ class BasicTest(unittest.TestCase):
         except exceptions.HTTPRequestException as e:
             if not 'duplicate' in e.response.json['error']:
                 raise Exception(e.response.json)
+            else:
+                return
 
         activation = resp['message']
 
