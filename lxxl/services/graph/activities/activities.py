@@ -2,6 +2,7 @@ from lxxl.lib import router, output
 from lxxl.lib.app import Error, Controller
 from lxxl.model.activities import Activity, Factory as ActivityFactory
 from lxxl.model.users import Factory as UserFactory
+from lxxl.model.blob import Factory as BlobFactory
 import time
 
 
@@ -66,6 +67,10 @@ class Activities(router.Root):
                 output.error('not found', 404)
 
             a.publish()
+            for (blobType, values) in a.published['blobs'].items():
+                for blobId in values:
+                    BlobFactory.publish(blobId)
+
             ActivityFactory.update(a)
             output.success(a.toObject(), 200)
         except Error:
@@ -79,6 +84,10 @@ class Activities(router.Root):
             a = ActivityFactory.get(params['rid'])
             if not a:
                 output.error('not found', 404)
+
+            for (blobType, values) in a.published['blobs'].items():
+                for blobId in values:
+                    BlobFactory.delete(blobId, 'published')
 
             a.publish(False)
             ActivityFactory.update(a)
