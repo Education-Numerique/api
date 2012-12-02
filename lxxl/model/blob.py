@@ -138,6 +138,7 @@ class Factory:
     def delete(blobId, release='draft'):
         try:
             try:
+                thumbnail = None
                 dbGrid = Db().getGridFs('blobs')
                 filename = "%s.%s" % (blobId, release)
                 thumbnail = dbGrid.get_last_version(filename)
@@ -148,16 +149,17 @@ class Factory:
             except NoFile:
                 pass
             finally:
-                if not 'activity' in thumbnail:
+                if not thumbnail or not 'activity' in thumbnail:
                     return True
 
                 a = ActivityFactory.get(thumbnail['activity'])
-                if not 'blobs' in a.draft:
+                node = a.__dict__[release]
+                if not 'blobs' in node:
                     return True
-                if not thumbnail['type'] in a.draft['blobs']:
+                if not thumbnail['type'] in node['blobs']:
                     return True
 
-                a.draft['blobs'][thumbnail['type']].remove(str(blobId))
+                node['blobs'][thumbnail['type']].remove(str(blobId))
                 ActivityFactory.update(a)
         except DbError:
             output.error('cannot access db', 503)

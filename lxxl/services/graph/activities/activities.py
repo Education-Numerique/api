@@ -40,7 +40,25 @@ class Activities(router.Root):
 
     def list(self, environ, params):
         try:
-            output.success('woooohooooo list', 200)
+            req = Controller().getRequest()
+            criteria = {}
+
+            if params['filter'] == 'mine':
+                criteria['author.uid'] = Controller().getUid()
+            elif params['filter'] == 'reported':
+                criteria['isReported'] = True
+            elif params['filter'] == 'published':
+                criteria['isPublished'] = True
+
+            for key in req.GET:
+                criteria[key] = req.GET[key]
+
+            search = ActivityFactory.list(criteria)
+            result = []
+            for activity in search:
+                result.append(activity.toObject())
+
+            output.success(result, 200)
         except Error:
             pass
 
@@ -109,7 +127,6 @@ class Activities(router.Root):
                 output.error('not found', 404)
 
             a.saveDraft(**req.json)
-
             ActivityFactory.update(a)
             output.success(a.toObject(), 200)
 

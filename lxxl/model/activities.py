@@ -176,3 +176,34 @@ class Factory:
                 return None
 
         return Activity(**data)
+
+    @staticmethod
+    def list(search):
+        try:
+            if isinstance(search, str):
+                search = {'_id': ObjectId(search)}
+            else:
+                tmp = {}
+                for (key, value) in search.items():
+                    tmp[key] = value
+                    Db().get('activities').ensure_index(
+                        [(key, DESCENDING)],
+                        {'background': False}
+                    )
+                search = tmp
+                del tmp
+
+            search['isDeleted'] = False
+            data = Db().get('activities').find(search)
+
+        except DbError:
+            output.error('cannot access db', 503)
+
+        result = []
+        if data is None:
+                return result
+
+        for tmp in data:
+            result.append(Activity(**tmp))
+
+        return result
