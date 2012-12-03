@@ -16,30 +16,14 @@ class Attachments(router.Root):
                 output.error('activity not found', 404)
 
             cT = req.headers['Content-Type'] or 'application/octet-stream'
-            blobId = BlobFactory.getBlobIds(
-                activity=params['rid'],
-                release="draft",
-                type="attachments"
-            )
 
-            if not len(blobId):
-                blobId = BlobFactory.insert(
-                    'attachments',
-                    'draft',
-                    req.body,
-                    cT,
-                    activity=params['rid']
-                )
-            else:
-                blobId = blobId[0]
-                BlobFactory.update(
-                    blobId,
-                    'attachments',
-                    'draft',
-                    req.body,
-                    cT,
-                    activity=params['rid']
-                )
+            blobId = BlobFactory.insert(
+                'attachments',
+                'draft',
+                req.body,
+                cT,
+                activity=params['rid']
+            )
 
             resultUrl = router.getRoute('graph.Blob.fetch', {
                 'version': params['version'],

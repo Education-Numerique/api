@@ -16,30 +16,13 @@ class Media(router.Root):
                 output.error('activity not found', 404)
 
             cT = req.headers['Content-Type'] or 'application/octet-stream'
-            blobId = BlobFactory.getBlobIds(
-                activity=params['rid'],
-                release="draft",
-                type="media"
+            blobId = BlobFactory.insert(
+                'media',
+                'draft',
+                req.body,
+                cT,
+                activity=params['rid']
             )
-
-            if not len(blobId):
-                blobId = BlobFactory.insert(
-                    'media',
-                    'draft',
-                    req.body,
-                    cT,
-                    activity=params['rid']
-                )
-            else:
-                blobId = blobId[0]
-                BlobFactory.update(
-                    blobId,
-                    'media',
-                    'draft',
-                    req.body,
-                    cT,
-                    activity=params['rid']
-                )
 
             resultUrl = router.getRoute('graph.Blob.fetch', {
                 'version': params['version'],
