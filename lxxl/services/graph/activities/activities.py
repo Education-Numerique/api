@@ -149,6 +149,20 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
+    def unreport(self, environ, params):
+        try:
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            a.isReported = False
+            ActivityFactory.update(a)
+            output.success(a.toObject(), 200)
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
     def seen(self, environ, params):
         try:
             a = ActivityFactory.get(params['rid'])

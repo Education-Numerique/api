@@ -85,6 +85,16 @@ routing:
         action: report
     method: post
 
+  - url: ^/:version/activities/:rid/unreport$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{24})
+    params:
+        service: graph.activities
+        module: Activities
+        action: unreport
+    method: post
+
   - url: ^/:version/activities/:rid/seen$
     vars:
         version: ([0-9]\.[0-9])
