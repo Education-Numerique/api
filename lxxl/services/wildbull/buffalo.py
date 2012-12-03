@@ -25,6 +25,12 @@ class Buffalo(router.Root):
         try:
             req = Controller().getRequest()
             wildResponse = Controller().getResponse()
+            reqData = None
+
+            _fileReadable = hasattr(req.body_file, 'read')
+            _bodyLength = int(req.headers['Content-Length'] or 0)
+            if req.method == 'POST' and _fileReadable and _bodyLength > 0:
+                reqData = req.body
 
             sendHeaders = {}
             for (k, v) in req.headers.items():
@@ -49,7 +55,6 @@ class Buffalo(router.Root):
                     'http://localhost:8082',
                     req.path_qs
                 ), headers=sendHeaders, data=data, prefetch=True)
-
             except:
                 output.error('Auth Backend fail', 503)
 
@@ -68,15 +73,11 @@ class Buffalo(router.Root):
                 if 'x-lxxl' in k.lower():
                     sendHeaders[k] = v
 
-            datas = None
-            if req.body:
-                datas = req.body
-
             try:
                 resp = requests.request(req.method, '%s%s' % (
                     'http://localhost:8083',
                     req.path_qs
-                ), headers=sendHeaders, data=datas, prefetch=True)
+                ), headers=sendHeaders, data=reqData, prefetch=True)
             except:
                 output.error('Graph backend fail', 503)
 
