@@ -75,7 +75,7 @@ class Activity:
     def saveDraft(self, **entries):
         entries = entries.copy()
         draftList = ['title', 'description', 'level', 'matter',
-                     'duration', 'difficulty', 'category', 'pages']
+                     'duration', 'difficulty', 'category', 'pages', 'extra']
 
         for (k, v) in entries.items():
             if not k in draftList:
