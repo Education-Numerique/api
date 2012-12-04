@@ -28,6 +28,7 @@ class Activity:
         self.draft['difficulty'] = None
         self.draft['category'] = []
         self.draft['pages'] = []
+        self.draft['extra'] = None
 
         self.published = {}
         self.published['contributors'] = []
@@ -41,6 +42,7 @@ class Activity:
         self.published['difficulty'] = None
         self.published['category'] = []
         self.published['pages'] = []
+        self.published['extra'] = None
 
         entries = entries.copy()
         if '_id' in entries:
