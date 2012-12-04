@@ -20,8 +20,8 @@ class Activity:
         self.draft['contributors'] = []
         self.draft['extraContributors'] = []
         self.draft['blobs'] = {}
-        self.draft['title'] = None
-        self.draft['description'] = None
+        self.draft['title'] = ''
+        self.draft['description'] = ''
         self.draft['level'] = None
         self.draft['matter'] = None
         self.draft['duration'] = None
@@ -33,8 +33,8 @@ class Activity:
         self.published['contributors'] = []
         self.published['extraContributors'] = []
         self.published['blobs'] = {}
-        self.published['title'] = None
-        self.published['description'] = None
+        self.published['title'] = ''
+        self.published['description'] = ''
         self.published['level'] = None
         self.published['matter'] = None
         self.published['duration'] = None
