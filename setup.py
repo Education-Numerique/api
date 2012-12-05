@@ -20,11 +20,12 @@ os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 requires = [
     'pyyaml',
     'webob',
-    'requests==0.13.1',
+    'requests==0.14.2',
     'python3-digest',
     'python3-memcached',
     'pymongo',
     'WTForms',
+    'wtforms_json',
     'mailsnake',
     'pil'
 ]

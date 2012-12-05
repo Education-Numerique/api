@@ -5,6 +5,9 @@ from webob import Request, Response
 from json import loads
 import urllib.parse
 
+import wtforms_json
+wtforms_json.init()
+
 
 class Error(Exception):
     def __init__(self, value):

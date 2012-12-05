@@ -15,8 +15,8 @@ class Account(router.Root):
 
     def create(self, environ, params):
         try:
-            datas = Controller().getRequest().POST
-            form = AccountCreateValidation(datas)
+            datas = Controller().getRequest().json
+            form = AccountCreateValidation.from_json(datas)
 
             if not form.validate():
                 output.error(form.errors)
@@ -53,7 +53,10 @@ class Account(router.Root):
                 Db().get('users').remove(user._id)
                 output.error('registration troubles ...', 500)
 
-            profile = {}
+            if 'extra' in datas:
+                profile = datas['extra']
+            else:
+                profile = {}
 
             #XXX should be done by the model
             Db().get('profile').update({'uid': user.uid}, {
@@ -98,7 +101,6 @@ class Account(router.Root):
                     }
                 ).start()
 
-
             #register user in mailchimp internal user list
             AsyncUserRegister(
                 email_address=user.email,
@@ -127,7 +129,7 @@ class Account(router.Root):
 
     def validate(self, environ, params):
         try:
-            datas = Controller().getRequest().POST
+            datas = Controller().getRequest().json
 
             if not 'email' in datas or not 'code' in datas:
                 output.error('invalidate code', 400)

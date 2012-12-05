@@ -13,7 +13,7 @@ class Profile(router.Root):
     def get(self, environ, params):
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            #relation = Controller().getRelation()
             me = Controller().getUid()
 
             # fix privacy
@@ -52,10 +52,6 @@ class Profile(router.Root):
                 result['hasAvatar'] = False
 
             result['friends'] = user.friends_count
-            result['relation'] = relation
-
-            output.noCache()
-            output.varnishCacheManager('1 year', ['Rox-User-Relation'])
 
             output.success(result, 200)
 
