@@ -63,16 +63,16 @@ class Profile(router.Root):
     def set(self, environ, params):
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            #relation = Controller().getRelation()
             me = Controller().getUid()
             apikey = Controller().getApiKey()
 
             if Controller().getApiType() != 1:
                 output.error('Not your api business', 403)
 
-            if relation != 2:
-                output.error(
-                    '#ApiKeyUnauthorized : none of your business', 403)
+            # if relation != 2:
+            #     output.error(
+            #         '#ApiKeyUnauthorized : none of your business', 403)
 
             user = UserFactory.get(params['uid'])
 
@@ -89,14 +89,6 @@ class Profile(router.Root):
                 'uid': me,
                 'updated': datetime.datetime.utcnow()
             }, True)
-
-            #Let's flush a few stuff
-            FlushRequest().request('users.Profile.[get]', {'uid': me})
-
-            try:
-                UserSync.update(user)
-            except:
-                print('////####\\\\\\\\ user index error')
 
             output.success('profile updated', 200)
 
