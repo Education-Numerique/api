@@ -10,7 +10,7 @@ class Settings(router.Root):
     def set(self, environ, params):
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            #relation = Controller().getRelation()
             me = Controller().getUid()
 
             if Controller().getApiType() != 1:
@@ -32,7 +32,7 @@ class Settings(router.Root):
             }, True)
 
             #Let's flush a few stuff
-            FlushRequest().request('users.Settings.[get]', {'uid': me})
+            #FlushRequest().request('users.Settings.[get]', {'uid': me})
 
             output.success('settings updated', 200)
 
@@ -44,11 +44,11 @@ class Settings(router.Root):
     def get(self, environ, params):
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            #relation = Controller().getRelation()
             me = Controller().getUid()
 
-            if relation != 2:
-                output.error('#UserUnauthorized : none of your business', 403)
+            # if relation != 2:
+            #     output.error('#UserUnauthorized : none of your business', 403)
 
             Db().get('settings').ensure_index(
                 [('uid', ASCENDING)], {'background': True})
@@ -58,8 +58,8 @@ class Settings(router.Root):
                 settings = {}
                 settings['datas'] = {}
 
-            output.noCache()
-            output.varnishCacheManager('1 year', 'Rox-User-Relation')
+            # output.noCache()
+            # output.varnishCacheManager('1 year', 'Rox-User-Relation')
 
             output.success(settings['datas'], 200)
 
