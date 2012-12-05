@@ -79,7 +79,7 @@ class Profile(router.Root):
             if not user:
                 output.error('unknown user', 404)
 
-            data = Controller().getPostJson()
+            data = Controller().getRequest().json
 
             if not data:
                 output.error('bad json format', 400)
