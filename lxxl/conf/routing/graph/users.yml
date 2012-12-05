@@ -26,7 +26,7 @@ routing:
 
   - url:    ^/:version/users/:uid/activate$
     vars:
-      uid: ([a-zA-Z0-9]{23})
+      uid: ([a-zA-Z0-9]{32})
       version: ([0-9]\.[0-9])
     params: 
         service : graph.users
@@ -36,7 +36,7 @@ routing:
 
   - url:    ^/:version/users/:uid/deactivate$
     vars:
-      uid: ([a-zA-Z0-9]{23})
+      uid: ([a-zA-Z0-9]{32})
       version: ([0-9]\.[0-9])
     params: 
         service : graph.users
@@ -55,7 +55,7 @@ routing:
 
   - url : ^/:version/users/:uid$
     vars:
-      uid: ([a-zA-Z0-9]{23})
+      uid: ([a-zA-Z0-9]{32})
       version: ([0-9]\.[0-9])
     params:
         service: graph.users
@@ -82,7 +82,7 @@ routing:
   - url:    ^/:version/users/:uid/profile$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Profile
@@ -92,7 +92,7 @@ routing:
   - url:    ^/:version/users/:uid/profile$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Profile
@@ -108,7 +108,7 @@ routing:
   - url:    ^/:version/users/search$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Search
@@ -125,7 +125,7 @@ routing:
   - url:    ^/:version/users/:uid/avatar/:size$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
         size: ([a-z]+)
     params: 
         service : graph.users
@@ -136,7 +136,7 @@ routing:
   - url:    ^/:version/users/:uid/avatar$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Avatar
@@ -146,7 +146,7 @@ routing:
   - url:    ^/:version/users/:uid/avatar$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Avatar
@@ -163,7 +163,7 @@ routing:
   - url:    ^/:version/users/:uid/settings$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Settings
@@ -173,7 +173,7 @@ routing:
   - url:    ^/:version/users/:uid/settings$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Settings
@@ -189,7 +189,7 @@ routing:
   - url:    ^/:version/users/:uid/preferences$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Preferences
@@ -199,7 +199,7 @@ routing:
   - url:    ^/:version/users/:uid/preferences$
     vars:
         version: ([0-9]\.[0-9])
-        uid: ([a-zA-Z0-9]{23})
+        uid: ([a-zA-Z0-9]{32})
     params: 
         service : graph.users
         module : Preferences
