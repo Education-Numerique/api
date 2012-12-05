@@ -1,6 +1,6 @@
 from lxxl.lib import router, output
 from lxxl.lib.app import Controller, Error
-from lxxl.lib.storage import Db
+from lxxl.lib.storage import Db, ASCENDING
 from lxxl.lib.flush import FlushRequest
 
 from lxxl.model.users import User, Factory as UserFactory, Duplicate
