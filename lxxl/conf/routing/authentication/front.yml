@@ -10,6 +10,16 @@ routing:
         action: check
     method: get
 
+  - url: ^/:version/activities/:filter$
+    vars:
+        version: ([0-9]\.[0-9])
+        filter: (published)?
+    params:
+        service: authentication.front
+        module: Void
+        action: check
+    method: get
+
   - url:    ^/:version/blob/:bid/:release$
     vars:
         version: ([0-9]\.[0-9])
