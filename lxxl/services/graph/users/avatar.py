@@ -2,187 +2,115 @@ from lxxl.lib import router, output
 from lxxl.lib.app import Controller, Error
 from lxxl.lib.config import Config
 from lxxl.lib.flush import FlushRequest
-from lxxl.lib.storage import Db
-
-from gridfs import NoFile
-from gridfs.errors import CorruptGridFile
-
-import Image, ImageOps
-import io
+from lxxl.lib.storage import Db, DbError
+from lxxl.model.blob import Factory as BlobFactory
+from lxxl.model.users import Factory as UserFactory
 
 
 class Avatar(router.Root):
 
     def get(self, environ, params):
-        file = im = tmp = None
         try:
-            filename = params['uid']
+            req = Controller().getRequest()
+            blobId = BlobFactory.getBlobIds(
+                user=params['uid'],
+                release='published',
+                type="avatar"
+            )
 
-            if 'size' not in params:
-                output.error('need size param', 400)
+            if not len(blobId):
+                output.error('avatar not found', 404)
 
-            size = self.__getSize(params['size'])
+            blobId = blobId.pop()
 
-            if not size:
-                output.error('invalid size', 400)
-
-            try:
-                file = Db().getGridFs('avatar').get_last_version(filename)
-            except NoFile:
-                output.cacheManager(3600 * 24 * 2)
-                output.error('not found', 404)
-
-            im = Image.open(file)
-            tmp = io.BytesIO()
-
-            width, height = im.size
-            size['width'] = int(size['width'])
-            size['height'] = int(size['height'])
-            if size['mode'] == 'crop':
-                width = size['width']
-                height = size['height']
-                im = ImageOps.fit(
-                    im, (width, height), Image.ANTIALIAS, 0, (.5, .5))
-            else:
-                im.thumbnail((size['width'], size['height']), Image.ANTIALIAS)
-
-            if im.mode != 'RGB':
-                im = im.convert('RGB')
-
-            im.save(tmp, 'JPEG', quality=70)
-
-            lm = file.upload_date.strftime("%a, %d %b %Y %H:%M:%S GMT")
+            b = BlobFactory.get(blobId, 'published')
             resp = Controller().getResponse()
-            resp.headers['Content-Type'] = str('image/jpeg')
-            resp.headers['Content-Length'] = str(file.length)
-            resp.headers['Last-Modified'] = lm
-
-            resp.body = tmp.getvalue()
-
-            output.varnishCacheManager('1 year')
-            output.cacheManager(3600 * 24)
-            #cleanup
-            tmp.close()
-
+            resp.headers['Content-Type'] = b.content_type
+            resp.body = b.read()
         except Error:
             pass
-        finally:
-            del file, im, tmp
 
         return Controller().getResponse(True)
 
     def set(self, environ, params):
-        file = img = None
         try:
-
             Controller().checkToken()
-            # relation = Controller().getRelation()
-
-            if Controller().getApiType() != 1:
-                output.error('Not your api business', 403)
-
-            # if relation != 2:
-            #     output.error(
-            #         '#ApiKeyUnauthorized : none of your business', 403)
-
             req = Controller().getRequest()
-            uid = params['uid']
-            limits = Config().get('upload')['images']
-            requestLength = int(req.headers['Content-Length'])
+            router = Controller().getRouter()
+            u = UserFactory.get(params['uid'])
+            if not u:
+                output.error('user not found', 404)
 
-            if requestLength > int(limits['size']):
-                output.error('file too fat', 413)
+            cT = req.headers['Content-Type'] or 'application/octet-stream'
+            blobId = BlobFactory.getBlobIds(
+                user=params['uid'],
+                release='published',
+                type="avatar"
+            )
 
-            try:
-                file = req.body
-                req.make_body_seekable()
-                img = Image.open(req.body_file)
-                img.verify()
-
-                (width, height) = img.size
-
-                if width > int(limits['width']) or \
-                    height > int(limits['height']) or \
-                        img.format.lower() not in limits['formats']:
-                    raise Exception("bad bad bad")
-
-                Db().getGridFs('avatar').put(
-                    file,
-                    content_type="image/%s" % img.format.lower(),
-                    filename=uid
+            if not len(blobId):
+                blobId = BlobFactory.insert(
+                    'avatar',
+                    'published',
+                    req.body,
+                    cT,
+                    user=params['uid']
                 )
-                Db().get('users').update(
-                    {'uid': uid}, {'$set': {'hasAvatar': True}})
+            else:
+                blobId = blobId[0]
+                BlobFactory.update(
+                    blobId,
+                    'avatar',
+                    'published',
+                    req.body,
+                    cT,
+                    user=params['uid']
+                )
 
-            except:
-                output.error('bad image', 400)
-
-            #clean old stuff
-            try:
-                file = Db().getGridFs('avatar').get_version(uid, -2)
-                Db().getGridFs('avatar').delete(file._id)
-
-                self.__flushAll(uid)
-            except NoFile:
-                pass
-            except CorruptGridFile:
-                pass
-
+            UserFactory.setAvatar(u.uid, True)
+            resultUrl = router.getRoute('graph.Blob.fetch', {
+                'version': params['version'],
+                'bid': str(blobId),
+                'release': 'published'
+            })
+            output.success({
+                'url': resultUrl,
+                'blobId': str(blobId)
+            }, 201)
         except Error:
             pass
-        finally:
-            del img, file
 
         return Controller().getResponse(True)
 
     def delete(self, environ, params):
-        file = None
         try:
             Controller().checkToken()
-            # relation = Controller().getRelation()
 
             if Controller().getApiType() != 1:
                 output.error('Not your api business', 403)
 
-            # if relation != 2:
-            #     output.error(
-            #         '#ApiKeyUnauthorized : none of your business', 403)
+            u = UserFactory.get(params['uid'])
+            if not u:
+                output.error('user not found', 404)
 
             uid = params['uid']
 
-            #try to delete
-            try:
-                file = Db().getGridFs('avatar').get_version(uid, -1)
-                Db().getGridFs('avatar').delete(file._id)
+            blobId = BlobFactory.getBlobIds(
+                user=params['uid'],
+                release='published',
+                type="avatar"
+            )
 
-                self.__flushAll(uid)
-            except NoFile:
-                pass
-            except CorruptGridFile:
-                pass
+            if not len(blobId):
+                output.error('avatar not found', 404)
 
-            output.access('avatar deleted', 200)
+            blobId = blobId.pop()
+            BlobFactory.delete(blobId, 'published')
+
+            UserFactory.setAvatar(u.uid, False)
+
+            output.success('avatar deleted', 200)
         except Error:
             pass
-        finally:
-            del file
 
         return Controller().getResponse(True)
-
-    def __getSize(self, name):
-        wlSize = Config().get('avatar')['sizes']
-
-        for size, value in wlSize.items():
-            if name.lower() == size.lower():
-                return value
-
-        return None
-
-    def __flushAll(self, uid):
-        wlSize = Config().get('avatar')['sizes']
-
-        for size in wlSize:
-            FlushRequest().request('users.Avatar.get', {
-                'uid': uid,
-                'size': size
-            })

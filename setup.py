@@ -26,13 +26,11 @@ requires = [
     'pymongo',
     'WTForms',
     'wtforms_json',
-    'mailsnake',
-    'pil'
+    'mailsnake'
 ]
 
 dep_links = [
-    'https://github.com/webitup/py3k-mailsnake/zipball/master#egg=mailsnake',
-    'https://github.com/webitup/pil-py3k-mirror/archive/master.zip#egg=pil'
+    'https://github.com/webitup/py3k-mailsnake/zipball/master#egg=mailsnake'
 ]
 
 setup(

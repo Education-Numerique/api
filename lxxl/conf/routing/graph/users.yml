@@ -122,11 +122,10 @@ routing:
   #
   ##############################################################################
 
-  - url:    ^/:version/users/:uid/avatar/:size$
+  - url:    ^/:version/users/:uid/avatar$
     vars:
         version: ([0-9]\.[0-9])
         uid: ([a-zA-Z0-9]{32})
-        size: ([a-z]+)
     params: 
         service : graph.users
         module : Avatar

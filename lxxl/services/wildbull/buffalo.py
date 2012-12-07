@@ -15,9 +15,6 @@ import requests
    set resp.http.Access-Control-Expose-Headers = resp.http.Access-Control-Expose-Headers + ", D-vcl";
 
 """
-import Image, ImageOps
-import io
-
 class Buffalo(router.Root):
     SESSION = requests.session()
 

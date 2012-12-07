@@ -19,7 +19,7 @@ class Factory:
                 filename="%s.%s" % (blobId, release),
                 type=blobType,
                 blobId=str(blobId),
-                release='draft',
+                release=release,
                 **args
             )
 

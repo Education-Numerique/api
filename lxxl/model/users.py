@@ -118,6 +118,13 @@ class Factory:
         return (result, total)
 
     @staticmethod
+    def setAvatar(uid, value):
+        Db().get('users').update(
+            {'uid': uid},
+            {'$set': {'hasAvatar': value}}
+        )
+
+    @staticmethod
     def new(obj):
         #Db().get('users').ensure_index([('username', storage.DESCENDING)], { 'unique' : True, 'background' : False, 'dropDups' : True })
         Db().get('users').ensure_index([('uid', DESCENDING)
