@@ -17,8 +17,8 @@ class Settings(router.Root):
                 output.error(
                     '#ApiKeyUnauthorized : none of your business', 403)
 
-            if relation != 2:
-                output.error('#UserUnauthorized : none of your business', 403)
+            # if relation != 2:
+            #     output.error('#UserUnauthorized : none of your business', 403)
 
             data = Controller().getPostJson()
 

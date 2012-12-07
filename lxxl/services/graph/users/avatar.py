@@ -36,9 +36,11 @@ class Avatar(router.Root):
             tmp = io.BytesIO()
 
             width, height = im.size
+            size['width'] = int(size['width'])
+            size['height'] = int(size['height'])
             if size['mode'] == 'crop':
-                width = int(size['width'])
-                height = int(size['height'])
+                width = size['width']
+                height = size['height']
                 im = ImageOps.fit(
                     im, (width, height), Image.ANTIALIAS, 0, (.5, .5))
             else:
@@ -74,14 +76,14 @@ class Avatar(router.Root):
         try:
 
             Controller().checkToken()
-            relation = Controller().getRelation()
+            # relation = Controller().getRelation()
 
             if Controller().getApiType() != 1:
                 output.error('Not your api business', 403)
 
-            if relation != 2:
-                output.error(
-                    '#ApiKeyUnauthorized : none of your business', 403)
+            # if relation != 2:
+            #     output.error(
+            #         '#ApiKeyUnauthorized : none of your business', 403)
 
             req = Controller().getRequest()
             uid = params['uid']
@@ -137,14 +139,14 @@ class Avatar(router.Root):
         file = None
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            # relation = Controller().getRelation()
 
             if Controller().getApiType() != 1:
                 output.error('Not your api business', 403)
 
-            if relation != 2:
-                output.error(
-                    '#ApiKeyUnauthorized : none of your business', 403)
+            # if relation != 2:
+            #     output.error(
+            #         '#ApiKeyUnauthorized : none of your business', 403)
 
             uid = params['uid']
 
