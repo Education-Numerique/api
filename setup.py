@@ -32,7 +32,7 @@ requires = [
 
 dep_links = [
     'https://github.com/webitup/py3k-mailsnake/zipball/master#egg=mailsnake',
-    'https://github.com/sloonz/pil-py3k/archive/master.zip#egg=pil'
+    'https://github.com/webitup/pil-py3k-mirror/archive/master.zip#egg=pil'
 ]
 
 setup(
