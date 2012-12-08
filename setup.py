@@ -56,5 +56,3 @@ setup(
     dependency_links=dep_links,
     license=open('LICENSE.md').read()
 )
-
-del os.environ['PYTHONDONTWRITEBYTECODE']
