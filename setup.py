@@ -21,7 +21,7 @@ requires = [
     'pyyaml',
     'webob',
     'chardet2',
-    'requests==0.14.2',
+    'requests==0.14.1',
     'python3-digest',
     'python3-memcached',
     'pymongo',
