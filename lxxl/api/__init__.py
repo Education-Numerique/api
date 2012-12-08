@@ -100,7 +100,7 @@ class LxxlRequest(object):
         return self.request('GET', url, params=params)
 
     def post(self, url, params={}):
-        return self.request('POST', url, data=params)
+        return self.request('POST', url, data=json.dumps(params))
 
     def request(self, method, url, **args):
         if 'headers' not in args:

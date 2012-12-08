@@ -1,7 +1,6 @@
 from lxxl.lib import router, output
 from lxxl.lib.app import Controller, Error
 from lxxl.lib.config import Config
-from lxxl.lib.flush import FlushRequest
 from lxxl.lib.storage import Db, DbError
 from lxxl.model.blob import Factory as BlobFactory
 from lxxl.model.users import Factory as UserFactory
