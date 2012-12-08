@@ -20,6 +20,7 @@ os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 requires = [
     'pyyaml',
     'webob',
+    'chardet2',
     'requests==0.14.2',
     'python3-digest',
     'python3-memcached',
