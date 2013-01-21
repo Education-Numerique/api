@@ -51,7 +51,7 @@ class Buffalo(router.Root):
                 resp = requests.request(req.method, '%s%s' % (
                     'http://localhost:8082',
                     req.path_qs
-                ), headers=sendHeaders, data=data, prefetch=True)
+                ), headers=sendHeaders, data=data, stream=False)
             except:
                 output.error('Auth Backend fail', 503)
 
@@ -63,7 +63,7 @@ class Buffalo(router.Root):
                     wildResponse.headers['X-WWW-Authenticate'] = wildResponse.headers['www-authenticate']
                     del wildResponse.headers['www-authenticate']
 
-                output.success(resp.json, resp.status_code)
+                output.success(resp.json(), resp.status_code)
                 raise Error('break')
 
             for (k, v) in resp.headers.items():
@@ -74,7 +74,7 @@ class Buffalo(router.Root):
                 resp = requests.request(req.method, '%s%s' % (
                     'http://localhost:8083',
                     req.path_qs
-                ), headers=sendHeaders, data=reqData, prefetch=True)
+                ), headers=sendHeaders, data=reqData, stream=False)
             except:
                 output.error('Graph backend fail', 503)
 

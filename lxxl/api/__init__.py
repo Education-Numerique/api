@@ -84,7 +84,7 @@ class LxxlRequest(object):
     def __init__(self, key, secret, host=None, version=None):
         self.key = key
         self.secret = secret
-        self.host = host if host else 'api.lxxl.net'
+        self.host = host if host else 'api.education-et-numerique.fr'
         self.version = version if version else '1.0'
 
         self.api_url = "http://%s/%s" % (self.host, self.version)

@@ -13,7 +13,6 @@ class FlushRequest():
             self.__cfg = Config().get('flush')
             self.host = 'http://%s' % Controller().getFullHost()
             self.__headers = {'Host': Controller().getFullHost()}
-            FlushRequest.SESSION.config['keep_alive'] = True
 
         def request(self, matching, values):
 

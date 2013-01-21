@@ -30,7 +30,6 @@ class Auth:
     class __impl():
 
         def __init__(self):
-            Auth.SESSION.config['keep_alive'] = True
             #self.__cfg = Config().get('auth')['admin']
             self.host = 'https://%s:443' % ('graph.facebook.com')
             #self.__cnx = Http('.cache')

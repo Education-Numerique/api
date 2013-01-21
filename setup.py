@@ -21,12 +21,12 @@ requires = [
     'pyyaml',
     'webob',
     'chardet2',
-    'requests==0.14.1',
+    'requests==1.1.0',
     'python3-digest',
     'python3-memcached',
     'pymongo',
     'WTForms',
-    'wtforms_json',
+    'wtforms_json==0.1.1',
     'mailsnake'
 ]
 

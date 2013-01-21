@@ -14,20 +14,15 @@ class AdminRequest():
                 self.__cfg['host'], self.__cfg['port'])
             self.__headers = {'Content-type':
                               'application/x-www-form-urlencoded'}
-            AdminRequest.SESSION.config['keep_alive'] = True
 
         def request(self, uri, datas={}, method='post'):
             #try:
-
-            params = []
-            for (key, value) in datas.items():
-                params.append((key, value))
 
             try:
                 resp = AdminRequest.SESSION.request(
                     method.upper(),
                     self.host + uri,
-                    data=params, headers=self.__headers, timeout=2)
+                    data=datas, headers=self.__headers, timeout=2)
             except Exception as err:  # timeout error
                 raise AdminError(err)
 
