@@ -76,8 +76,8 @@ class Account(router.Root):
                     global_merge_vars=[
                     ],
                     message={
-                        'subject': 'Validate your e-mail at Lxxl',
-                        'from_email': 'void@webitup.fr',
+                        'subject': 'Valider votre compte Éducation et Numérique',
+                        'from_email': 'no-reply@education-et-numerique.fr',
                         'from_name': 'Education & Numérique',
                         'headers': {},
                         'to': [
@@ -170,8 +170,8 @@ class Account(router.Root):
                     template_content=[],
                     global_merge_vars=[],
                     message={
-                        'subject': 'Welcome to LxxL !',
-                        'from_email': 'void@webitup.fr',
+                        'subject': 'Bienvenue dans la communauté des auteurs d\'Education & Numérique',
+                        'from_email': 'no-reply@education-et-numerique.fr',
                         'from_name': 'Education & Numérique',
                         'headers': {},
                         'to': [
