@@ -17,7 +17,6 @@ class AsyncMailer(threading.Thread):
         #self.daemon = True
 
     def run(self):
-        print('****sending', self.params)
         m = mandrill.messages.send_template(**self.params)
 
         return
