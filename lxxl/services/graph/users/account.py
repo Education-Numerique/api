@@ -65,41 +65,40 @@ class Account(router.Root):
                 'updated': datetime.datetime.utcnow()
             }, True)
 
-            if user.email != 'void@webitup.fr':
-                #send mail
-                AsyncMailer(
-                    template_name='email-validation',
-                    template_content=[{
-                        'name': 'validation_code',
-                        'content': user.activation_code
-                    }],
-                    global_merge_vars=[
+            #send mail
+            AsyncMailer(
+                template_name='email-validation',
+                template_content=[{
+                    'name': 'validation_code',
+                    'content': user.activation_code
+                }],
+                global_merge_vars=[
+                ],
+                message={
+                    'subject': 'Valider votre compte Éducation et Numérique',
+                    'from_email': 'no-reply@education-et-numerique.fr',
+                    'from_name': 'Education & Numérique',
+                    'headers': {},
+                    'to': [
+                        {
+                            'email': user.email,
+                            'name': user.username
+                        }
                     ],
-                    message={
-                        'subject': 'Valider votre compte Éducation et Numérique',
-                        'from_email': 'no-reply@education-et-numerique.fr',
-                        'from_name': 'Education & Numérique',
-                        'headers': {},
-                        'to': [
-                            {
-                                'email': user.email,
-                                'name': user.username
-                            }
-                        ],
-                        'metadata': {
-                            'uid': user.uid,
-                            'email_validation_code': user.activation_code
-                        },
-                        'tags': ['email-validation'],
-                        'google_analytics_domains': ['beta.lxxl.com'],
-                        'google_analytics_campaign': [
-                            'internal_email_validation'
-                        ],
-                        'auto_text': True,
-                        'track_opens': True,
-                        'track_clicks': True
-                    }
-                ).start()
+                    'metadata': {
+                        'uid': user.uid,
+                        'email_validation_code': user.activation_code
+                    },
+                    'tags': ['email-validation'],
+                    'google_analytics_domains': ['beta.lxxl.com'],
+                    'google_analytics_campaign': [
+                        'internal_email_validation'
+                    ],
+                    'auto_text': True,
+                    'track_opens': True,
+                    'track_clicks': True
+                }
+            ).start()
 
             #register user in mailchimp internal user list
             AsyncUserRegister(
@@ -164,33 +163,32 @@ class Account(router.Root):
             Db().get('users').update({'uid': user.uid}, user)
 
             #send mail
-            if user.email != 'void@webitup.fr':
-                AsyncMailer(
-                    template_name='registered',
-                    template_content=[],
-                    global_merge_vars=[],
-                    message={
-                        'subject': 'Bienvenue dans la communauté des auteurs d\'Education & Numérique',
-                        'from_email': 'no-reply@education-et-numerique.fr',
-                        'from_name': 'Education & Numérique',
-                        'headers': {},
-                        'to': [
-                            {
-                                'email': user.email,
-                                'name': user.username
-                            }
-                        ],
-                        'metadata': {
-                            'uid': user.uid
-                        },
-                        'tags': ['welcome'],
-                        'google_analytics_domains': ['beta.roxee.tv'],
-                        'google_analytics_campaign': ['internal_registered'],
-                        'auto_text': True,
-                        'track_opens': True,
-                        'track_clicks': True
-                    }
-                ).start()
+            AsyncMailer(
+                template_name='registered',
+                template_content=[],
+                global_merge_vars=[],
+                message={
+                    'subject': 'Bienvenue dans la communauté des auteurs d\'Education & Numérique',
+                    'from_email': 'no-reply@education-et-numerique.fr',
+                    'from_name': 'Education & Numérique',
+                    'headers': {},
+                    'to': [
+                        {
+                            'email': user.email,
+                            'name': user.username
+                        }
+                    ],
+                    'metadata': {
+                        'uid': user.uid
+                    },
+                    'tags': ['welcome'],
+                    'google_analytics_domains': ['beta.roxee.tv'],
+                    'google_analytics_campaign': ['internal_registered'],
+                    'auto_text': True,
+                    'track_opens': True,
+                    'track_clicks': True
+                }
+            ).start()
 
             output.success('user activated', 200)
         except Error:
