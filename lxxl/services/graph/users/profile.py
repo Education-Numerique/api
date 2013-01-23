@@ -43,6 +43,7 @@ class Profile(router.Root):
             result['email'] = user.email
             result['username'] = user.username
             result['uid'] = user.uid
+            result['level'] = user.level
 
             if user.hasAvatar is True:
                 result['hasAvatar'] = True
