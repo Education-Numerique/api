@@ -21,6 +21,7 @@ class User:
         self.date = None
         self.premium = False
         self.connect = {}
+        self.level = 1;
 
         self.__dict__.update(entries)
 
@@ -29,6 +30,15 @@ class User:
             del self.friends
         except:
             pass
+
+    def makeAdmin(self):
+        self.level = 3
+
+    def makeAuthor(self):
+        self.level = 1
+
+    def makeReviewer(self):
+        self.level = 2
 
     def addConnect(self, type, id):
         self.connect[type] = id
