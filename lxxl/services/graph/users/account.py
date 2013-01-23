@@ -208,15 +208,15 @@ class Account(router.Root):
         output.error('delete not yet', 501)
         return Controller().getResponse(True)
 
-    #XXX remove me after alpha
     def list(self, environ, params):
         try:
             Controller().checkToken()
-            relation = Controller().getRelation()
+            me = Controller().getUid()
+            apikey = Controller().getApiKey()
 
-            #XXX fix privacy
-            # if relation != 2 and relation != 1:
-            #     output.error('#ApiKeyUnauthorized', 403)
+            if me.level < 3:
+                output.error('forbidden', 403)
+           
 
             friends, total = UserFactory.getAllUsers()
 
@@ -226,8 +226,8 @@ class Account(router.Root):
             #     except:
             #         print('////####\\\\\\\\ user index error')
 
-            output.noCache()
-            output.varnishCacheManager('1 year')
+            # output.noCache()
+            # output.varnishCacheManager('1 year')
             output.userList(friends, total)
 
         except Error:
