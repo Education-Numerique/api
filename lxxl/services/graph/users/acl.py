@@ -4,7 +4,7 @@ from lxxl.lib import router, output
 from lxxl.lib.app import Controller, Error
 from lxxl.lib.storage import Db
 from lxxl.lib.flush import FlushRequest
-from lxxl.model.users import UserFactory
+from lxxl.model.users import Factory as UserFactory
 
 
 class Acl(router.Root):
