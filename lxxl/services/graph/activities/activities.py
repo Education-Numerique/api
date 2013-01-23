@@ -48,6 +48,7 @@ class Activities(router.Root):
             if not a.isPublished:
                 output.error('unauthorized access', 403)
 
+            del a.draft
             output.success(a.toObject(), 200)
         except Error:
             pass
