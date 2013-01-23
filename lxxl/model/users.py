@@ -21,7 +21,7 @@ class User:
         self.date = None
         self.premium = False
         self.connect = {}
-        self.level = 1;
+        self.level = 1
 
         self.__dict__.update(entries)
 
