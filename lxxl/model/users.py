@@ -46,7 +46,7 @@ class User:
         if '_id' in obj:
             del obj['_id']
 
-        obj['id'] = str(obj['id'])
+        obj['uid'] = str(obj['uid'])
         return obj
 
     def addConnect(self, type, id):
