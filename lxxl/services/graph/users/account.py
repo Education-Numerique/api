@@ -223,6 +223,8 @@ class Account(router.Root):
 
             result = []
             for user in users:
+                profile = user.getProfile()
+                user['profile'] = profile.__dict__
                 result.append(user.toObject())
 
             # for u in friends:
