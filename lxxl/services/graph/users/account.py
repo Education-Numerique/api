@@ -214,7 +214,8 @@ class Account(router.Root):
             me = Controller().getUid()
             apikey = Controller().getApiKey()
 
-            if me.level < 3:
+            u = UserFactory.get(me)
+            if u.level < 3:
                 output.error('forbidden', 403)
            
 
