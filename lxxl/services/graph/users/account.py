@@ -228,14 +228,7 @@ class Account(router.Root):
                 uObject['profile'] = profile['datas']
                 result.append(uObject)
 
-            # for u in friends:
-            #     try:
-            #         UserSync.update(u)
-            #     except:
-            #         print('////####\\\\\\\\ user index error')
 
-            # output.noCache()
-            # output.varnishCacheManager('1 year')
             output.success(result, 200)
 
         except Error:
