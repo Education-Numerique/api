@@ -4,3 +4,4 @@ from .settings import Settings
 from .profile import Profile
 from .avatar import Avatar
 from .search import Search
+from .acl import Acl
