@@ -224,8 +224,9 @@ class Account(router.Root):
             result = []
             for user in users:
                 profile = user.getProfile()
-                user['profile'] = profile['datas']
-                result.append(user.toObject())
+                uObject = user.toObject()
+                uObject['profile'] = profile['datas']
+                result.append(uObject)
 
             # for u in friends:
             #     try:
