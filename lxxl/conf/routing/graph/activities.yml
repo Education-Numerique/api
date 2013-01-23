@@ -35,6 +35,16 @@ routing:
         action: fetch
     method: get
 
+  - url: ^/:version/activities/:rid/public$
+    vars:
+        version: ([0-9]\.[0-9])
+        rid: ([a-zA-Z0-9]{24})
+    params:
+        service: graph.activities
+        module: Activities
+        action: fetchPublic
+    method: get
+
   - url: ^/:version/activities/:rid$
     vars:
         version: ([0-9]\.[0-9])

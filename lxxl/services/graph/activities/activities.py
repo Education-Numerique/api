@@ -38,6 +38,22 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
+    def fetch(self, environ, params):
+        try:
+            req = Controller().getRequest()
+            a = ActivityFactory.get(params['rid'])
+            if not a:
+                output.error('not found', 404)
+
+            if not a.isPublished:
+                output.error('unauthorized access', 403)
+
+            output.success(a.toObject(), 200)
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
     def list(self, environ, params):
         try:
             req = Controller().getRequest()

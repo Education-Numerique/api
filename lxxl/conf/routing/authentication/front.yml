@@ -30,6 +30,16 @@ routing:
         action: check
     method: get 
 
+  - url:    ^/:version/activities/:aid/public$
+    vars:
+        version: ([0-9]\.[0-9])
+        aid: ([a-zA-Z0-9]{24})
+    params: 
+        service : authentication.front
+        module : Void
+        action: check
+    method: get 
+
   - url:    ^/:version/users/$
     vars:
         version: ([0-9]\.[0-9])
