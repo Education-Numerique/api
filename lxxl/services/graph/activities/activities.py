@@ -38,7 +38,7 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
-    def fetch(self, environ, params):
+    def fetchPublic(self, environ, params):
         try:
             req = Controller().getRequest()
             a = ActivityFactory.get(params['rid'])
