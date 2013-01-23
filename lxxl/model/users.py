@@ -40,6 +40,15 @@ class User:
     def makeReviewer(self):
         self.level = 2
 
+    def toObject(self):
+        obj = self.__dict__.copy()
+
+        if '_id' in obj:
+            del obj['_id']
+
+        obj['id'] = str(obj['id'])
+        return obj
+
     def addConnect(self, type, id):
         self.connect[type] = id
 

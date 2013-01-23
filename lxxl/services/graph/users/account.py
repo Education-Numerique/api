@@ -219,7 +219,11 @@ class Account(router.Root):
                 output.error('forbidden', 403)
            
 
-            friends, total = UserFactory.getAllUsers()
+            users, total = UserFactory.getAllUsers()
+
+            result = []
+            for user in users:
+                result.append(user.toObject())
 
             # for u in friends:
             #     try:
@@ -229,7 +233,7 @@ class Account(router.Root):
 
             # output.noCache()
             # output.varnishCacheManager('1 year')
-            output.userList(friends, total)
+            output.success(result, 200)
 
         except Error:
             pass
