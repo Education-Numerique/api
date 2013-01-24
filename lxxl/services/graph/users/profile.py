@@ -66,6 +66,11 @@ class Profile(router.Root):
             me = Controller().getUid()
             apikey = Controller().getApiKey()
 
+            me = UserFactory.get(me)
+
+            if me.level < 3:
+                output.error('UserUnauthorized', 403)
+
             if Controller().getApiType() != 1:
                 output.error('Not your api business', 403)
 
