@@ -90,7 +90,7 @@ class Profile(router.Root):
 
             Db().get('profile').update({'uid': user.uid}, {
                 'datas': data,
-                'uid': user,
+                'uid': user.uid,
                 'updated': datetime.datetime.utcnow()
             }, True)
 
