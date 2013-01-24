@@ -68,9 +68,7 @@ class Profile(router.Root):
 
             me = UserFactory.get(me)
 
-            print(me.uid != params['uid'])
-            print(me.level < 3)
-            if me.uid != params['uid'] or me.level < 3:
+            if me.uid != params['uid'] and me.level < 3:
                 output.error('UserUnauthorized', 403)
 
             if Controller().getApiType() != 1:
