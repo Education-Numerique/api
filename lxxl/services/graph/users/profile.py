@@ -83,9 +83,9 @@ class Profile(router.Root):
             if not data:
                 output.error('bad json format', 400)
 
-            Db().get('profile').update({'uid': me}, {
+            Db().get('profile').update({'uid': user.uid}, {
                 'datas': data,
-                'uid': me,
+                'uid': user,
                 'updated': datetime.datetime.utcnow()
             }, True)
 
