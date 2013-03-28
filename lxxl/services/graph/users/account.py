@@ -252,10 +252,6 @@ class Account(router.Root):
 
     def reminderSend(self, environ, params):
         try:
-            Controller().checkToken()
-
-            output.noCache()
-
             Controller().getResponse(
             ).headers['X-UID'] = '%s' % Controller().getUid()
             output.success('reminder send', 200)
@@ -267,10 +263,6 @@ class Account(router.Root):
 
     def reminderSave(self, environ, params):
         try:
-            Controller().checkToken()
-
-            output.noCache()
-
             Controller().getResponse(
             ).headers['X-UID'] = '%s' % Controller().getUid()
             output.success('reminder save', 200)
