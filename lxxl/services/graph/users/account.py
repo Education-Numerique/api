@@ -339,6 +339,9 @@ class Account(router.Root):
             if resp is None or int(resp.getHeader('status')) != 200:
                 output.error('activation troubles ...', 500)
             
+            user.password_reminder = None
+            Db().get('users').update({'uid': user.uid}, user)
+            
             output.success('password changed', 200)
 
         except Error:
