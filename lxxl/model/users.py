@@ -22,6 +22,7 @@ class User:
         self.premium = False
         self.connect = {}
         self.level = 1
+        self.password_reminder = None
 
         self.__dict__.update(entries)
 
@@ -94,6 +95,9 @@ class User:
 
     def generateActivationCode(self):
         self.activation_code = utils.randomBase62()
+
+    def generatePasswordReminder(self):
+        self.password_reminder = utils.randomBase62()
 
     def generateUid(self, id):
         self.seq = id

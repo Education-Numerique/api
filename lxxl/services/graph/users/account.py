@@ -261,6 +261,45 @@ class Account(router.Root):
             if user is None:
                 output.error('unknown user', 400)
 
+            user.generatePasswordReminder()
+
+            Db().get('users').update({'uid': user.uid}, user)
+
+            #send mail
+            AsyncMailer(
+                template_name='password-reminder',
+                template_content=[{
+                    'name': 'validation_code',
+                    'content': user.password_reminder
+                }],
+                global_merge_vars=[
+                ],
+                message={
+                    'subject': 'Mot de passe perdu Éducation et Numérique',
+                    'from_email': 'no-reply@education-et-numerique.fr',
+                    'from_name': 'Education & Numérique',
+                    'headers': {},
+                    'to': [
+                        {
+                            'email': user.email,
+                            'name': user.username
+                        }
+                    ],
+                    'metadata': {
+                        'uid': user.uid,
+                        'email_validation_code': user.password_reminder
+                    },
+                    'tags': ['password-reminder'],
+                    'google_analytics_domains': ['beta.lxxl.com'],
+                    'google_analytics_campaign': [
+                        'internal_password_reminder'
+                    ],
+                    'auto_text': True,
+                    'track_opens': True,
+                    'track_clicks': True
+                }
+            ).start()
+
             output.success('reminder send', 200)
 
         except Error:
