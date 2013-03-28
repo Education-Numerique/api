@@ -252,8 +252,16 @@ class Account(router.Root):
 
     def reminderSend(self, environ, params):
         try:
-            Controller().getResponse(
-            ).headers['X-UID'] = '%s' % Controller().getUid()
+            datas = Controller().getRequest().json
+            print(datas)
+            if not 'email' in datas:
+                output.error('need email', 400)
+
+            user = UserFactory.get({'email': datas['email']})
+
+            if user is None:
+                output.error('unknown user', 400)
+
             output.success('reminder send', 200)
 
         except Error:
