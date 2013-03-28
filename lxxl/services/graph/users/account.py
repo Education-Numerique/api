@@ -325,8 +325,21 @@ class Account(router.Root):
             if user.password_reminder != datas['code']:
                 output.error('wrong code', 400)
 
+            #Init account on admin service
+            try:
+                uri = '/1.0/user/' + user.uid
+                resp = AdminRequest().request(uri, {
+                    'uid': user.uid,
+                    'login': user.email,
+                    'password': datas['password']
+                })
+            except AdminError as e:
+                output.error('Registration error : %s' % e, 500)
+
+            if resp is None or int(resp.getHeader('status')) != 200:
+                output.error('activation troubles ...', 500)
             
-            output.success('reminder save', 200)
+            output.success('password changed', 200)
 
         except Error:
             pass
