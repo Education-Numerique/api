@@ -250,6 +250,36 @@ class Account(router.Root):
 
         return Controller().getResponse(True)
 
+    def reminderSend(self, environ, params):
+        try:
+            Controller().checkToken()
+
+            output.noCache()
+
+            Controller().getResponse(
+            ).headers['X-UID'] = '%s' % Controller().getUid()
+            output.success('reminder send', 200)
+
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
+    def reminderSave(self, environ, params):
+        try:
+            Controller().checkToken()
+
+            output.noCache()
+
+            Controller().getResponse(
+            ).headers['X-UID'] = '%s' % Controller().getUid()
+            output.success('reminder save', 200)
+
+        except Error:
+            pass
+
+        return Controller().getResponse(True)
+
 
 class AccountCreateValidation(Form):
     username = TextField('username', [validators.Length(min=5, max=25)])

@@ -72,6 +72,24 @@ routing:
         action: list
     method: get
 
+  - url:    ^/:version/users/reminder$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: reminderSend
+    method: get
+
+  - url:    ^/:version/users/reminder$
+    vars:
+        version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: reminderValidate
+    method: post
+
 
   ##############################################################################
   #
