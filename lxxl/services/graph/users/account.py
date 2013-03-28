@@ -252,12 +252,11 @@ class Account(router.Root):
 
     def reminderSend(self, environ, params):
         try:
-            datas = Controller().getRequest().json
-            print(datas)
-            if not 'email' in datas:
+            email = Controller().getRequest().GET['email']
+            if not email:
                 output.error('need email', 400)
 
-            user = UserFactory.get({'email': datas['email']})
+            user = UserFactory.get({'email': email})
 
             if user is None:
                 output.error('unknown user', 400)
