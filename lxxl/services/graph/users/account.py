@@ -307,10 +307,25 @@ class Account(router.Root):
 
         return Controller().getResponse(True)
 
-    def reminderSave(self, environ, params):
+    def reminderValidate(self, environ, params):
         try:
-            Controller().getResponse(
-            ).headers['X-UID'] = '%s' % Controller().getUid()
+            datas = Controller().getRequest().json
+
+            if not 'email' in datas or not 'code' in datas or not 'password' in datas:
+                output.error('invalidate code', 400)
+
+            user = UserFactory.get({'email': datas['email']})
+
+            if user is None:
+                output.error('unknown user', 400)
+
+            if not user.password_reminder:
+                output.error('no password reminder asked', 403)
+
+            if user.password_reminder != datas['code']:
+                output.error('wrong code', 400)
+
+            
             output.success('reminder save', 200)
 
         except Error:
