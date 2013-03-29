@@ -224,6 +224,7 @@ class Account(router.Root):
             if not user:
                 output.error('unknown user', 404)
             
+            user.activate = 0
             user.deactivated = True
 
             #Init account on admin service
