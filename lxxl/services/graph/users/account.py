@@ -207,7 +207,27 @@ class Account(router.Root):
         return Controller().getResponse(True)
 
     def deactivate(self, environ, params):
-        output.error('activate not yet', 501)
+        try:
+            Controller().checkToken()
+            me = Controller().getUid()
+            apikey = Controller().getApiKey()
+
+            u = UserFactory.get(me)
+            if u.level < 3:
+                output.error('forbidden', 403)
+
+            if u.uid == params['uid']:
+                output.error('cannot delete yourself', 403)
+           
+            user = UserFactory.get(params['uid'])
+
+            if not user:
+                output.error('unknown user', 404)
+            
+
+            output.success('deactivated user', 200)
+        except Error:
+            pass
         return Controller().getResponse(True)
 
     def delete(self, environ, params):
