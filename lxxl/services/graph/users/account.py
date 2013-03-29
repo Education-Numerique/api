@@ -85,6 +85,12 @@ class Account(router.Root):
                             'name': user.username
                         }
                     ],
+                    "global_merge_vars": [
+                        {
+                            "name": "code",
+                            "content": user.activation_code
+                        }
+                    ],
                     'metadata': {
                         'uid': user.uid,
                         'email_validation_code': user.activation_code
