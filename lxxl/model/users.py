@@ -15,6 +15,7 @@ class User:
         self.lastname = None
         self.email = None
         self.activate = 0
+        self.deactivated = False
         self.activation_code = None
         self.friends_count = 0
         self.hasAvatar = False

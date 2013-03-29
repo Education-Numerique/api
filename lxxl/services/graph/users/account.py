@@ -224,6 +224,22 @@ class Account(router.Root):
             if not user:
                 output.error('unknown user', 404)
             
+            user.deactivated = True
+
+            #Init account on admin service
+            try:
+                uri = '/1.0/user/' + user.uid + '/deactivate'
+                resp = AdminRequest().request(uri, {
+                    'uid': user.uid,
+                    'login': user.email
+                })
+            except AdminError as e:
+                output.error('Registration error : %s' % e, 500)
+
+            if resp is None or int(resp.getHeader('status')) != 200:
+                output.error('activation troubles ...', 500)
+
+            Db().get('users').update({'uid': user.uid}, user)
 
             output.success('deactivated user', 200)
         except Error:
