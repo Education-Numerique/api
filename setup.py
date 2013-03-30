@@ -26,7 +26,7 @@ requires = [
     'python3-memcached',
     'pymongo',
     'WTForms',
-    'wtforms_json==0.1.1',
+    'wtforms_json',
     'mailsnake'
 ]
 
