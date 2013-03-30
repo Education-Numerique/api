@@ -247,6 +247,47 @@ class Account(router.Root):
             pass
         return Controller().getResponse(True)
 
+    def password(self, environ, params):
+        try:
+            Controller().checkToken()
+            me = Controller().getUid()
+            password = params['password']
+            apikey = Controller().getApiKey()
+
+            if not password:
+                output.error('invalid format', 400)
+
+            me = UserFactory.get(me)
+            if me.uid != params['uid'] and me.level < 3:
+                output.error('UserUnauthorized', 403)
+
+            if Controller().getApiType() != 1:
+                output.error('Not your api business', 403)
+           
+            user = UserFactory.get(params['uid'])
+
+            if not user:
+                output.error('unknown user', 404)
+            
+            #Init account on admin service
+            try:
+                uri = '/1.0/user/' + user.uid + '/deactivate'
+                resp = AdminRequest().request(uri, {
+                    'uid': user.uid,
+                    'login': user.email,
+                    'password': password
+                })
+            except AdminError as e:
+                output.error('Registration error : %s' % e, 500)
+
+            if resp is None or int(resp.getHeader('status')) != 200:
+                output.error('activation troubles ...', 500)
+
+            output.success('password changed', 200)
+        except Error:
+            pass
+        return Controller().getResponse(True)
+
     def delete(self, environ, params):
         output.error('delete not yet', 501)
         return Controller().getResponse(True)

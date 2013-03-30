@@ -34,6 +34,16 @@ routing:
         action: activate
     method: post
 
+  - url:    ^/:version/users/:uid/password$
+    vars:
+      uid: ([a-zA-Z0-9]{32})
+      version: ([0-9]\.[0-9])
+    params: 
+        service : graph.users
+        module : Account
+        action: password
+    method: post
+
   - url:    ^/:version/users/:uid/deactivate$
     vars:
       uid: ([a-zA-Z0-9]{32})
@@ -80,15 +90,6 @@ routing:
         module : Account
         action: reminderSend
     method: get
-
-  - url:    ^/:version/users/reminder$
-    vars:
-        version: ([0-9]\.[0-9])
-    params: 
-        service : graph.users
-        module : Account
-        action: reminderValidate
-    method: post
 
 
   ##############################################################################

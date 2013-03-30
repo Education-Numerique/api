@@ -107,6 +107,37 @@ class User(router.Root):
 
         return app.Controller().getResponse(True)
 
+    def password(self, environ, params):
+        try:
+            req = app.Controller().getRequest()
+            uid = req.POST.get('uid')
+            login = req.POST.get('login')
+
+            if not uid or not login:
+                output.error('invalid format', 400)
+
+            login = login.lower()
+            user = users.Factory.get(login)
+
+            if (not user) or (user.uid != uid):
+                output.error('unknown acess', 404)
+
+            user.activate = 0
+
+            storage.Db().get('auth_users').update({
+                'login': login,
+                'uid': uid
+            }, user)
+
+            storage.Memcache().delete(login, 'auth')
+
+            output.success('user deactivated', 200)
+
+        except app.Error:
+            pass
+
+        return app.Controller().getResponse(True)
+
     def deactivate(self, environ, params):
         try:
             req = app.Controller().getRequest()
