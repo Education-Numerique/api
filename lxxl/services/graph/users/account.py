@@ -251,7 +251,7 @@ class Account(router.Root):
         try:
             Controller().checkToken()
             me = Controller().getUid()
-            password = params['password']
+            password = Controller().getRequest().json['password']
             apikey = Controller().getApiKey()
 
             if not password:
