@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 __title__ = 'lxxl'
-__version__ = '0.0.3'
+__version__ = '1.0.0'
 __build__ = 0x001400
 __author__ = 'Education Numerique'
 __license__ = 'AGPL'
