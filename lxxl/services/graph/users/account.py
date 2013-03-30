@@ -271,7 +271,7 @@ class Account(router.Root):
             
             #Init account on admin service
             try:
-                uri = '/1.0/user/' + user.uid + '/deactivate'
+                uri = '/1.0/user/' + user.uid
                 resp = AdminRequest().request(uri, {
                     'uid': user.uid,
                     'login': user.email,
