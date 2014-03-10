@@ -89,8 +89,24 @@ class User(router.Root):
             login = login.lower()
             user = users.Factory.get(login)
 
+'''##########################################################
+# A reprende pour faire face aux différentes éventualités.
+# Mais je ne cause pas Python, alors .... (JBT)
+
+            if (not user):
+                output.error('unknown access', 404) # "Ce compte n'existe pas"
+
+            if (user) and (user.activate == 1):
+                output.error('invalid format', 400) # "Votre compte est déjà activé"
+
+            if (user) and (user.uid != uid):
+                output.error('unknown access', 404) # "Ce code n'est pas valable"
+
+'''
             if (not user) or (user.uid != uid):
                 output.error('unknown access', 404)
+
+##########################################################
 
             user.activate = 1
 

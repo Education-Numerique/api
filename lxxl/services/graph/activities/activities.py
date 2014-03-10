@@ -38,6 +38,7 @@ class Activities(router.Root):
 
         return Controller().getResponse(True)
 
+# sur ce principe, on pourrait définir un fetchDraft pour partager un draft ... (JBT)
     def fetchPublic(self, environ, params):
         try:
             req = Controller().getRequest()
