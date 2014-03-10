@@ -10,7 +10,8 @@ Api services for lxxl.
 Linux (Ubuntu 12.04) installation
 =========================
 
-1. As root (adapt these to your favorite Linux flavor):
+**1. As root** 
+adapt these to your favorite Linux flavor:
 
 Add 10-gen repository to sources.list:
 ```deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen```
@@ -22,7 +23,7 @@ Get system dependencies:
 ```aptitude install python3-pip python-pip git nginx uwsgi mongodb20-10gen memcached uwsgi-plugin-python3 python-dev python3-dev libyaml-dev```
 
 
-2. Also as root, should be cross-distro:
+**2. Also as root, should be cross-distro**
 
 Get venv and puke:
 ```pip install virtualenv; pip install puke```
@@ -31,24 +32,28 @@ Prepare directory:
 ```mkdir -p /home/lxxl-deploy; cd /home/lxxl-deploy; chown www-data /home/lxxl-deploy```
 
 Prepare uwsgi:
-```cd /etc/uwsgi/apps-available```
-
-vi lxxl.wildbull.ini:
-```[uwsgi]
+```
+cd /etc/uwsgi/apps-available
+vi lxxl.wildbull.ini
+```
+```
+[uwsgi]
   workers = 1
   listen = 100
   home = /opt/puke/lxxl/
   module = lxxl.wsgi.wildbull
-  plugins = python32```
-
-vi ../inherited_config.ini:
-```[uwsgi]
+  plugins = python32
+```
+```
+vi ../inherited_config.ini
+```
+```
+[uwsgi]
 autoload = true
 # XXX macosx testing
 # plugins = python32
 # XXX test macosx
 # no-site = true
-
 
 daemonize = /var/log/uwsgi/app/%(lxxl).log
 
@@ -89,11 +94,18 @@ harakiri-verbose = true
 post-buffering = 8192
 ```
 
+```
 vi /etc/default/uwsgi:
-```INHERITED_CONFIG=/etc/uwsgi/inherited_config.ini```
+```
+```
+INHERITED_CONFIG=/etc/uwsgi/inherited_config.ini
+```
+```
+vi lxxl.graph.ini
+```
 
-vi lxxl.graph.ini:
-```[uwsgi]
+```
+[uwsgi]
   workers = 1
   listen = 100
   home = /home/lxxl-deploy/virtualenv
@@ -101,9 +113,11 @@ vi lxxl.graph.ini:
   plugins = python32
   lxxl = lxxl.graph 
 ```
-
-vi lxxl.auth.front.ini:
-```[uwsgi]
+```
+vi lxxl.auth.front.ini
+```
+```
+[uwsgi]
   workers = 1
   listen = 100
   home = /home/lxxl-deploy/virtualenv
@@ -111,9 +125,12 @@ vi lxxl.auth.front.ini:
   plugins = python32
   lxxl = lxxl.auth.front
 ```
+```
+vi lxxl.auth.admin.ini
+```
 
-vi lxxl.auth.admin.ini:
-```[uwsgi]
+```
+[uwsgi]
   workers = 1
   listen = 100
   home = /home/lxxl-deploy/virtualenv
@@ -126,34 +143,35 @@ Enable apps:
 ```cd ../apps-enabled; ln -s ../apps-available/* .;```
 
 
-3. Now, downgrade to www-data:
-```su www-data```
+**3. Now, downgrade to www-data:**
+```
+su www-data
+```
 
-Fetch sources:
-```git clone https://github.com/Education-Numerique/api.git```
+Fetch sources: ```git clone https://github.com/Education-Numerique/api.git```
 
-Setup venv:
-```virtualenv -p python3.2 --no-site-packages /home/lxxl-deploy/virtualenv```
+Setup venv: ```virtualenv -p python3.2 --no-site-packages /home/lxxl-deploy/virtualenv```
 
-Now setup:
-```cd api; source ../virtualenv/bin/activate; python3 setup.py install```
+Now setup: ```cd api; source ../virtualenv/bin/activate; python3 setup.py install```
 
-4. Back to root, restart uwsgi:
-```/etc/init.d/uwsgi restart```
+**4. Back to root, restart uwsgi:**
+```
+/etc/init.d/uwsgi restart
+```
 
 Doesn't work? Check /var/log/uwsgi and investigate.
 
-5. Nginx
 
-vi /etc/nginx/sites-available/lxxl:
+**5. Configure server (Nginx)**
+```
+vi /etc/nginx/sites-available/lxxl
+```
 
+**6. Front**
 
-
-
-6. Front
-
-Either do it the hard way (not for the faint of heart), use the forks and build them:
-```# RVM is supposedly the sane way to use Rubeshit
+*Either do it the hard way* (not for the faint of heart), use the forks and build them:
+```
+# RVM is supposedly the sane way to use Rubeshit
 curl -L https://get.rvm.io | bash -s stable --ruby
 /var/www/.rvm/scripts/rvm
 source ~/.bashrc
@@ -174,9 +192,9 @@ cd jsboot.js; puke; cd -;
 cd authoring.js; puke; cd -;
 ```
 
-Or do yourself a favor and just use a release tarball, to be extracted into /home/lxxl-deploy/lxxl
+*Or do yourself a favor* and just use a release tarball, to be extracted into /home/lxxl-deploy/lxxl
 
-And, ha, don't forget to init the mongo database ;).
+**And, ha, don't forget to init the mongo database ;).**
 
 
 Random OSX notes
