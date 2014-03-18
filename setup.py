@@ -38,7 +38,7 @@ setup(
     name='lxxl',
     version=lxxl.__version__,
     description='LxxL Web Services',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
     author='Education Numerique',
     author_email='tech@webitup.fr',
     url='http://education-numerique.github.com/api/',

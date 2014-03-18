@@ -1,13 +1,12 @@
 clients.lxxl.api
 =========================
 
-.. image:: https://secure.travis-ci.org/Education-Numerique/api.png
-        :target: http://travis-ci.org/Education-Numerique/api
+Travis: http://travis-ci.org/Education-Numerique/api
 
 Api services for lxxl.
 
 
-Linux (Ubuntu 12.04) installation
+Linux (Ubuntu 12.10 ) installation
 =========================
 
 **1. As root** 
@@ -25,27 +24,17 @@ Get system dependencies:
 
 **2. Also as root, should be cross-distro**
 
-Get venv and puke:
-```pip install virtualenv; pip install puke```
+Get venv:
+```pip install virtualenv```
 
 Prepare directory:
 ```mkdir -p /home/lxxl-deploy; cd /home/lxxl-deploy; chown www-data /home/lxxl-deploy```
 
 Prepare uwsgi:
+a) inherited config
 ```
-cd /etc/uwsgi/apps-available
-vi lxxl.wildbull.ini
-```
-```
-[uwsgi]
-  workers = 1
-  listen = 100
-  home = /opt/puke/lxxl/
-  module = lxxl.wsgi.wildbull
-  plugins = python32
-```
-```
-vi ../inherited_config.ini
+cd /etc/uwsgi
+vi inherited_config.ini
 ```
 ```
 [uwsgi]
@@ -100,10 +89,24 @@ vi /etc/default/uwsgi:
 ```
 INHERITED_CONFIG=/etc/uwsgi/inherited_config.ini
 ```
+
+b) prepare workers
+```
+cd /etc/uwsgi/apps-available
+vi lxxl.wildbull.ini
+```
+```
+[uwsgi]
+  workers = 1
+  listen = 100
+  home = /opt/puke/lxxl/
+  module = lxxl.wsgi.wildbull
+  plugins = python32
+```
+
 ```
 vi lxxl.graph.ini
 ```
-
 ```
 [uwsgi]
   workers = 1
@@ -113,6 +116,7 @@ vi lxxl.graph.ini
   plugins = python32
   lxxl = lxxl.graph 
 ```
+
 ```
 vi lxxl.auth.front.ini
 ```
@@ -125,10 +129,10 @@ vi lxxl.auth.front.ini
   plugins = python32
   lxxl = lxxl.auth.front
 ```
+
 ```
 vi lxxl.auth.admin.ini
 ```
-
 ```
 [uwsgi]
   workers = 1
@@ -140,11 +144,15 @@ vi lxxl.auth.admin.ini
 ```
 
 Enable apps:
-```cd ../apps-enabled; ln -s ../apps-available/* .;```
+```cd ../apps-enabled; ln -s ../apps-available/*.ini .;```
 
 
-**3. Now, downgrade to www-data:**
-```
+**3. Get and install puke:
+```pip install puke```
+Check installation details at : https://github.com/webitup/puke
+
+**4. Now, downgrade to www-data:**
+``` 
 su www-data
 ```
 
@@ -154,7 +162,7 @@ Setup venv: ```virtualenv -p python3.2 --no-site-packages /home/lxxl-deploy/virt
 
 Now setup: ```cd api; source ../virtualenv/bin/activate; python3 setup.py install```
 
-**4. Back to root, restart uwsgi:**
+**5. Back to root, restart uwsgi:**
 ```
 /etc/init.d/uwsgi restart
 ```
@@ -162,12 +170,12 @@ Now setup: ```cd api; source ../virtualenv/bin/activate; python3 setup.py instal
 Doesn't work? Check /var/log/uwsgi and investigate.
 
 
-**5. Configure server (Nginx)**
+**6. Configure server (Nginx)**
 ```
 vi /etc/nginx/sites-available/lxxl
 ```
 
-**6. Front**
+**7. Front**
 
 *Either do it the hard way* (not for the faint of heart), use the forks and build them:
 ```
