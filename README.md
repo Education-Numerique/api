@@ -99,7 +99,7 @@ vi lxxl.wildbull.ini
 [uwsgi]
   workers = 1
   listen = 100
-  home = /opt/puke/lxxl/
+  home = /home/lxxl-deploy/virtualenv 
   module = lxxl.wsgi.wildbull
   plugins = python32
 ```

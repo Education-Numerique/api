@@ -7,10 +7,8 @@ mailer:
   mailchimp: c74c55cfcd3c7d1847259acfebc53da8-us5
   list_id: de45ca6a28
 
-
 nonce_ttl: 600
 realm: prod@lxxl
-
 
 upload:
   images:
@@ -18,7 +16,7 @@ upload:
     height: 2000
     size: 1000000
     formats: [png,jpeg]
-    
+
 avatar:
   sizes:  
     square:
@@ -37,8 +35,8 @@ avatar:
       width: 500
       height: 500
       mode: fit
-      
-      
+
+
 auth:
   admin:
       host: localhost
