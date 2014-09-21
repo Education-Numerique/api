@@ -31,7 +31,7 @@ application.ROOT = ROOT
 application.addRoutingFromConfig('*', routing)
 
 
-log.info('Roxee Data server is running (#%s).' % os.getpid())
+log.info('LxxL Data Server is running (#%s).' % os.getpid())
 
 
 if __name__ == '__main__':
